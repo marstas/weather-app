@@ -1,6 +1,6 @@
 interface WeatherApi {
-  getCurrentByCoord: (coord: Coordinates, units: string) => Promise<CurrentInfo>;
-  getCurrentByCity: (cityName: string, units: string) => Promise<CurrentInfo>;
+  getCurrent: (city: string, units: string) => Promise<CurrentInfo>;
+  getDaily: (coord: Coordinates, units: string) => Promise<DailyInfo>;
 }
 
 interface CurrentInfo {
@@ -19,6 +19,46 @@ interface CurrentInfo {
   visibility: number;
   weather: WeatherData[];
   wind: WindData;
+}
+
+interface DailyInfo {
+  daily: DailyStats[];
+}
+
+interface DailyStats {
+  dt: number;
+  sunrise: number;
+  sunset: number;
+  temp: {
+    day: number;
+    min: number;
+    max: number;
+    night: number;
+    eve: number;
+    morn: number;
+  };
+  feels_like: {
+    day: number;
+    night: number;
+    eve: number;
+    morn: number;
+  };
+  pressure: number;
+  humidity: number;
+  dew_point: number;
+  wind_speed: number;
+  wind_deg: number;
+  weather: [
+    {
+      id: number;
+      main: string;
+      description: string;
+      icon: string;
+    }
+  ];
+  clouds: number;
+  pop: number;
+  uvi: number;
 }
 
 interface Coordinates {

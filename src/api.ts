@@ -1,19 +1,14 @@
 import axios from "axios";
-
-const apiKey = "86e9a453e4af0c55cc11e8bf54c567d0";
+import {current, daily} from "./constants";
 
 const weatherApi = (): WeatherApi => {
   return {
-    getCurrentByCoord: async (coord: Coordinates, units: string) => {
-      const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${coord.lat}&lon=${coord.lon}&appid=${apiKey}`
-      );
+    getCurrent: async (city: string, units: string) => {
+      const res = await axios.get(`${current}&q=${city}&units=${units}`);
       return res.data;
     },
-    getCurrentByCity: async (name: string, units: string) => {
-      const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?units=${units}&q=${name}&appid=${apiKey}`
-      );
+    getDaily: async (coord: Coordinates, units: string) => {
+      const res = await axios.get(`${daily}&lat=${coord.lat}&lon=${coord.lon}&units=${units}`);
       return res.data;
     }
   };
