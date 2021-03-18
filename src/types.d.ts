@@ -1,9 +1,9 @@
 interface WeatherApi {
-  getByCoords: (coord: Coordinates, units: string) => Promise<GeneralInfo>;
-  getByCityName: (name: string, units: string) => Promise<GeneralInfo>;
+  getCurrentByCoord: (coord: Coordinates, units: string) => Promise<CurrentInfo>;
+  getCurrentByCity: (cityName: string, units: string) => Promise<CurrentInfo>;
 }
 
-interface GeneralInfo {
+interface CurrentInfo {
   base: string;
   clouds: {
     all: number;
