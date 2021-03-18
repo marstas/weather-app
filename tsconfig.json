@@ -13,10 +13,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "downlevelIteration": true,
-    "paths": {
-      "components/*": ["src/components/*"]
-    }
+    "downlevelIteration": true
   },
-  "include": ["./src", "./webpack.config.ts"]
+  "include": ["./src", "./webpack.config.ts", "./static"]
 }
