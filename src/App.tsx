@@ -7,6 +7,7 @@ const api = weatherApi();
 const App: React.FC = () => {
   const [current, setCurrent] = useState<CurrentInfo>(null);
   const [daily, setDaily] = useState<DailyInfo>(null);
+  const [error, setError] = useState<string>("");
   const [units, setUnits] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [coord, setCoord] = useState<Coordinates>(null);
@@ -17,8 +18,15 @@ const App: React.FC = () => {
   useEffect(() => {
     if (units && city)
       api.getCurrent(city, units).then((res) => {
-        setCurrent(res);
-        setCoord({lat: res.coord.lat, lon: res.coord.lon});
+        if (res.name !== "Error") {
+          setCurrent(res);
+          setCoord({lat: res.coord.lat, lon: res.coord.lon});
+          setError("");
+        } else {
+          setCurrent(null);
+          setDaily(null);
+          setError(`City "${city}" was not found`);
+        }
       });
   }, [city, units]);
 
@@ -38,7 +46,7 @@ const App: React.FC = () => {
   };
 
   const validateInput = (value: string) => {
-    if (value.match(/[^a-zA-Z\s:]/)) return false;
+    if (value.match(/[0-9$&+,:;=?@#|'<>.^*()%!~[{\\}/\]-]/)) return false;
     else return true;
   };
 
@@ -65,22 +73,25 @@ const App: React.FC = () => {
           title={validInput ? "Search" : "Numbers and special characters are not allowed"}
         />
       </form>
-      <input
-        type="radio"
-        name="toggle"
-        value="°F"
-        onChange={() => setToggle(!toggle)}
-        checked={!toggle}
-      />
-      <label>°F</label>
-      <input
-        type="radio"
-        name="toggle"
-        value="°C"
-        onChange={() => setToggle(!toggle)}
-        checked={toggle}
-      />
-      <label>°C</label>
+      <div>
+        <input
+          type="radio"
+          name="toggle"
+          value="°F"
+          onChange={() => setToggle(!toggle)}
+          checked={!toggle}
+        />
+        <label>°F</label>
+        <input
+          type="radio"
+          name="toggle"
+          value="°C"
+          onChange={() => setToggle(!toggle)}
+          checked={toggle}
+        />
+        <label>°C</label>
+      </div>
+      <span className="error-message">{error}</span>
       <span>
         <pre>{JSON.stringify(current, null, 2)}</pre>
       </span>
