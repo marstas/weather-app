@@ -15,5 +15,5 @@
     "moduleResolution": "node",
     "downlevelIteration": true
   },
-  "include": ["./src", "./webpack.config.ts", "./static"]
+  "include": ["./src", "./webpack.config.ts"]
 }
