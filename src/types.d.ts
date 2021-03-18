@@ -1,6 +1,6 @@
 interface WeatherApi {
   getByCoords: (coord: Coordinates, units: string) => Promise<GeneralInfo>;
-  getByCityId: (id: number, units: string) => Promise<GeneralInfo>;
+  getByCityName: (name: string, units: string) => Promise<GeneralInfo>;
 }
 
 interface GeneralInfo {
@@ -54,17 +54,4 @@ interface WindData {
   deg: number;
   gust: number;
   speed: number;
-}
-
-interface CityData {
-  id: 833;
-  name: string;
-  state: string;
-  country: string;
-  coord: Coordinates;
-}
-
-declare module "*.json" {
-  const allCityData: CityData[];
-  export default allCityData;
 }

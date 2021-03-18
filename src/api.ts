@@ -10,9 +10,9 @@ const weatherApi = (): WeatherApi => {
       );
       return res.data;
     },
-    getByCityId: async (id: number, units: string) => {
+    getByCityName: async (name: string, units: string) => {
       const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?units=${units}&id=${id}&appid=${apiKey}`
+        `https://api.openweathermap.org/data/2.5/weather?units=${units}&q=${name}&appid=${apiKey}`
       );
       return res.data;
     }
