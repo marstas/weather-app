@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [coord, setCoord] = useState<Coordinates>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [validInput, setValidInput] = useState<boolean>(true);
+  const [toggle, setToggle] = useState<boolean>(true);
 
   useEffect(() => {
     if (units && city)
@@ -23,7 +24,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (units && coord) api.getDaily(coord, units).then((res) => setDaily(res));
+    return () => setCoord(null); // cleanup to avoid double API calls
   }, [coord, units]);
+
+  useEffect(() => {
+    const u = toggle ? "metric" : "imperial";
+    setUnits(u);
+  }, [toggle]);
 
   const onSearchInput = (value: string) => {
     setSearchInput(value);
@@ -51,8 +58,29 @@ const App: React.FC = () => {
             onChange={(event) => onSearchInput(event.target.value)}
           />
         </label>
-        <input type="submit" value="Search" disabled={!validInput} />
+        <input
+          type="submit"
+          value="Search"
+          disabled={!validInput}
+          title={validInput ? "Search" : "Numbers and special characters are not allowed"}
+        />
       </form>
+      <input
+        type="radio"
+        name="toggle"
+        value="°F"
+        onChange={() => setToggle(!toggle)}
+        checked={!toggle}
+      />
+      <label>°F</label>
+      <input
+        type="radio"
+        name="toggle"
+        value="°C"
+        onChange={() => setToggle(!toggle)}
+        checked={toggle}
+      />
+      <label>°C</label>
       <span>
         <pre>{JSON.stringify(current, null, 2)}</pre>
       </span>
