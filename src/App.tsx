@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import weatherApi from "./api";
+import {imgBase} from "./constants";
 import "./App.scss";
 
 const api = weatherApi();
@@ -25,7 +26,7 @@ const App: React.FC = () => {
         } else {
           setCurrent(null);
           setDaily(null);
-          setError(`City "${city}" was not found`);
+          setError(`City "${city}" was not found.`);
         }
       });
   }, [city, units]);
@@ -55,43 +56,51 @@ const App: React.FC = () => {
     event.preventDefault();
   };
 
+  const renderCurrent = () => {
+    return (
+      current && (
+        <>
+          <img
+            alt={current.weather[0].description}
+            src={`${imgBase}${current.weather[0].icon}@2x.png`}
+          />
+          <div className="current-info">
+            <span className="current-temp">
+              {`${current.main.temp}${units === "metric" ? " °C" : " °F"}`}
+            </span>
+            <span className="current-city">{`${current.name}, ${current.sys.country}`}</span>
+          </div>
+        </>
+      )
+    );
+  };
+
   return (
     <main>
       <form onSubmit={handleSearchSubmit}>
-        <label>
-          <input
-            type="search"
-            placeholder="Search by city"
-            value={searchInput}
-            onChange={(event) => onSearchInput(event.target.value)}
-          />
-        </label>
         <input
+          className="search-input"
+          type="search"
+          placeholder="Enter city name..."
+          value={searchInput}
+          onChange={(event) => onSearchInput(event.target.value)}
+        />
+        <input
+          className="search-submit"
           type="submit"
           value="Search"
-          disabled={!validInput}
+          disabled={!validInput || !searchInput}
           title={validInput ? "Search" : "Numbers and special characters are not allowed"}
         />
       </form>
-      <div>
-        <input
-          type="radio"
-          name="toggle"
-          value="°F"
-          onChange={() => setToggle(!toggle)}
-          checked={!toggle}
-        />
-        <label>°F</label>
-        <input
-          type="radio"
-          name="toggle"
-          value="°C"
-          onChange={() => setToggle(!toggle)}
-          checked={toggle}
-        />
+      <div className="units-radio-wrapper">
+        <input type="radio" name="toggle-f" onChange={() => setToggle(!toggle)} checked={!toggle} />
+        <label className="label-f">°F</label>
+        <input type="radio" name="toggle-c" onChange={() => setToggle(!toggle)} checked={toggle} />
         <label>°C</label>
       </div>
-      <span className="error-message">{error}</span>
+      <div className="error-message">{error}</div>
+      <div className="current-wrapper">{renderCurrent()}</div>
       <span>
         <pre>{JSON.stringify(current, null, 2)}</pre>
       </span>

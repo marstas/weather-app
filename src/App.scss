@@ -1,5 +1,69 @@
-$base-color: #c6538c;
+$color-gray: #e0e0e0;
+$color-dark: #cecccc;
 
-h1 {
-  color: $base-color;
+body {
+  display: flex;
+  justify-content: center;
+
+  main {
+    margin-top: 50px;
+
+    form {
+      input {
+        border-radius: 5px;
+        padding: 8px 15px;
+        border: 1px solid $color-gray;
+
+        &.search-input {
+          margin-right: 5px;
+
+          &:focus {
+            border-color: $color-gray;
+          }
+        }
+
+        &.search-submit:not([disabled]) {
+          cursor: pointer;
+
+          &:hover {
+            background-color: $color-dark;
+          }
+        }
+      }
+    }
+
+    .units-radio-wrapper {
+      margin-top: 10px;
+
+      .label-f {
+        margin-right: 10px;
+      }
+    }
+
+    .error-message {
+      display: flex;
+      justify-content: center;
+      margin: 10px auto;
+      font-weight: bold;
+      color: chocolate;
+    }
+
+    .current-wrapper {
+      display: flex;
+      align-items: center;
+
+      .current-info {
+        display: flex;
+        flex-direction: column;
+
+        .current-temp {
+          font-size: 30px;
+        }
+
+        .current-city {
+          font-style: italic;
+        }
+      }
+    }
+  }
 }
