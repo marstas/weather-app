@@ -113,18 +113,24 @@ const App: React.FC = () => {
         <div className="units-radio-wrapper">
           <input
             type="radio"
+            id="toggle-f"
             name="toggle-f"
             onChange={() => setToggle(!toggle)}
             checked={!toggle}
           />
-          <label className="label-f">&nbsp;F</label>
+          <label htmlFor="toggle-f" className="label-f">
+            &nbsp;° F
+          </label>
           <input
             type="radio"
+            id="toggle-c"
             name="toggle-c"
             onChange={() => setToggle(!toggle)}
             checked={toggle}
           />
-          <label>&nbsp;C</label>
+          <label htmlFor="toggle-c" className="label-c">
+            &nbsp;° C
+          </label>
         </div>
         <form onSubmit={handleSearchSubmit}>
           <input
