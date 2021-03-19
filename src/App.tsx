@@ -9,12 +9,21 @@ const App: React.FC = () => {
   const [current, setCurrent] = useState<CurrentInfo>(null);
   const [daily, setDaily] = useState<DailyInfo>(null);
   const [error, setError] = useState<string>("");
-  const [units, setUnits] = useState<string>("");
+  const [units, setUnits] = useState<string>("metric");
   const [city, setCity] = useState<string>("");
   const [coord, setCoord] = useState<Coordinates>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [validInput, setValidInput] = useState<boolean>(true);
   const [toggle, setToggle] = useState<boolean>(true);
+
+  useEffect(() => {
+    api.getCity().then((res) => {
+      if (res.city) {
+        setCity(res.city);
+        setSearchInput(res.city);
+      }
+    });
+  }, []); // get location/weather info on first load
 
   useEffect(() => {
     if (units && city)
@@ -66,7 +75,7 @@ const App: React.FC = () => {
           />
           <div className="current-info">
             <span className="current-temp">
-              {`${current.main.temp}${units === "metric" ? " °C" : " °F"}`}
+              {`${Math.round(current.main.temp)}${units === "metric" ? " °C" : " °F"}`}
             </span>
             <span className="current-city">{`${current.name}, ${current.sys.country}`}</span>
           </div>

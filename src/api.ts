@@ -1,5 +1,5 @@
 import axios from "axios";
-import {current, daily} from "./constants";
+import {current, daily, ipFind} from "./constants";
 
 const weatherApi = (): WeatherApi => {
   return {
@@ -16,6 +16,15 @@ const weatherApi = (): WeatherApi => {
       let res = null;
       try {
         res = await axios.get(`${daily}&lat=${coord.lat}&lon=${coord.lon}&units=${units}`);
+      } catch (error) {
+        return error.toJSON();
+      }
+      return res.data;
+    },
+    getCity: async () => {
+      let res = null;
+      try {
+        res = await axios.get(ipFind);
       } catch (error) {
         return error.toJSON();
       }

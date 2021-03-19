@@ -1,6 +1,7 @@
 interface WeatherApi {
   getCurrent: (city: string, units: string) => Promise<CurrentInfo>;
   getDaily: (coord: Coordinates, units: string) => Promise<DailyInfo>;
+  getCity: () => Promise<IpFindData>;
 }
 
 interface CurrentInfo {
@@ -94,4 +95,8 @@ interface WindData {
   deg: number;
   gust: number;
   speed: number;
+}
+
+interface IpFindData {
+  city: string;
 }
