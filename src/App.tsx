@@ -90,6 +90,7 @@ const App: React.FC = () => {
       onecall.daily.map((d, indx) => {
         return (
           <div key={indx} className="daily-card">
+            <div>{new Date(d.dt * 1000).toUTCString().slice(0, 7)}</div>
             <img alt={d.weather[0].description} src={`${imgBase}${d.weather[0].icon}@2x.png`} />
             <div>
               <span className="temp-max">{Math.round(d.temp.max)}°&nbsp;</span>

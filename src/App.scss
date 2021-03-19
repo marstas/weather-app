@@ -87,8 +87,10 @@ body {
       margin: 3rem auto;
 
       .daily-card {
-        margin: 0 2rem 4rem 2rem;
+        margin: 0 1rem 4rem 1rem;
         text-align: center;
+        box-shadow: 0 2px 6px 1px $color-gray;
+        padding: 1.2rem;
 
         .temp-max {
           font-size: 2.5em;
