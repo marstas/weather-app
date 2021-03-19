@@ -1,6 +1,6 @@
 interface WeatherApi {
   getCurrent: (city: string, units: string) => Promise<CurrentInfo>;
-  getDaily: (coord: Coordinates, units: string) => Promise<DailyInfo>;
+  getOnecall: (coord: Coordinates, units: string) => Promise<OnecallInfo>;
   getCity: () => Promise<IpFindData>;
 }
 
@@ -22,7 +22,7 @@ interface CurrentInfo {
   wind: WindData;
 }
 
-interface DailyInfo {
+interface OnecallInfo {
   daily: DailyStats[];
 }
 

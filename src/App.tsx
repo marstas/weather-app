@@ -7,7 +7,7 @@ const api = weatherApi();
 
 const App: React.FC = () => {
   const [current, setCurrent] = useState<CurrentInfo>(null);
-  const [daily, setDaily] = useState<DailyInfo>(null);
+  const [onecall, setOnecall] = useState<OnecallInfo>(null);
   const [error, setError] = useState<string>("");
   const [units, setUnits] = useState<string>("metric");
   const [city, setCity] = useState<string>("");
@@ -34,14 +34,14 @@ const App: React.FC = () => {
           setError("");
         } else {
           setCurrent(null);
-          setDaily(null);
-          setError(`City "${city}" was not found.`);
+          setOnecall(null);
+          setError(`City "${city}" was not found`);
         }
       });
   }, [city, units]);
 
   useEffect(() => {
-    if (units && coord) api.getDaily(coord, units).then((res) => setDaily(res));
+    if (units && coord) api.getOnecall(coord, units).then((res) => setOnecall(res));
     return () => setCoord(null); // cleanup to avoid double API calls
   }, [coord, units]);
 
@@ -71,51 +71,80 @@ const App: React.FC = () => {
         <>
           <img
             alt={current.weather[0].description}
-            src={`${imgBase}${current.weather[0].icon}@2x.png`}
+            src={`${imgBase}${current.weather[0].icon}@4x.png`}
           />
           <div className="current-info">
             <span className="current-temp">
-              {`${Math.round(current.main.temp)}${units === "metric" ? " °C" : " °F"}`}
+              {`${Math.round(current.main.temp)}${units === "metric" ? "° C" : "° F"}`}
             </span>
-            <span className="current-city">{`${current.name}, ${current.sys.country}`}</span>
+            <i>{`${current.name}, ${current.sys.country}`}</i>
           </div>
         </>
       )
     );
   };
 
+  const renderDaily = () => {
+    return (
+      onecall?.daily.length > 0 &&
+      onecall.daily.map((d, indx) => {
+        return (
+          <div key={indx} className="daily-card">
+            <img alt={d.weather[0].description} src={`${imgBase}${d.weather[0].icon}@2x.png`} />
+            <div>
+              <span className="temp-max">{Math.round(d.temp.max)}°&nbsp;</span>
+              <span className="temp-min">
+                <sup>{Math.round(d.temp.min)}°</sup>
+              </span>
+            </div>
+            <div className="daily-description">
+              <i>{d.weather[0].description}</i>
+            </div>
+          </div>
+        );
+      })
+    );
+  };
+
   return (
     <main>
-      <form onSubmit={handleSearchSubmit}>
-        <input
-          className="search-input"
-          type="search"
-          placeholder="Enter city name..."
-          value={searchInput}
-          onChange={(event) => onSearchInput(event.target.value)}
-        />
-        <input
-          className="search-submit"
-          type="submit"
-          value="Search"
-          disabled={!validInput || !searchInput}
-          title={validInput ? "Search" : "Numbers and special characters are not allowed"}
-        />
-      </form>
-      <div className="units-radio-wrapper">
-        <input type="radio" name="toggle-f" onChange={() => setToggle(!toggle)} checked={!toggle} />
-        <label className="label-f">°F</label>
-        <input type="radio" name="toggle-c" onChange={() => setToggle(!toggle)} checked={toggle} />
-        <label>°C</label>
-      </div>
-      <div className="error-message">{error}</div>
+      <header>
+        <div className="units-radio-wrapper">
+          <input
+            type="radio"
+            name="toggle-f"
+            onChange={() => setToggle(!toggle)}
+            checked={!toggle}
+          />
+          <label className="label-f">&nbsp;F</label>
+          <input
+            type="radio"
+            name="toggle-c"
+            onChange={() => setToggle(!toggle)}
+            checked={toggle}
+          />
+          <label>&nbsp;C</label>
+        </div>
+        <form onSubmit={handleSearchSubmit}>
+          <input
+            className="search-input"
+            type="search"
+            placeholder="Enter city name..."
+            value={searchInput}
+            onChange={(event) => onSearchInput(event.target.value)}
+          />
+          <input
+            className="search-submit"
+            type="submit"
+            value="Search"
+            disabled={!validInput || !searchInput}
+            title={validInput ? "Search" : "Numbers and special characters are not allowed"}
+          />
+        </form>
+      </header>
+      <div className={`error-message ${error ? "" : "d-none"}`}>{error}</div>
       <div className="current-wrapper">{renderCurrent()}</div>
-      <span>
-        <pre>{JSON.stringify(current, null, 2)}</pre>
-      </span>
-      <span>
-        <pre>{JSON.stringify(daily, null, 2)}</pre>
-      </span>
+      <div className="daily-wrapper">{renderDaily()}</div>
     </main>
   );
 };

@@ -1,67 +1,110 @@
 $color-gray: #e0e0e0;
-$color-dark: #cecccc;
+$color-dark: #8a8989;
 
 body {
-  display: flex;
-  justify-content: center;
+  .d-none {
+    display: none !important;
+  }
 
   main {
-    margin-top: 50px;
+    margin-top: 3rem;
 
-    form {
-      input {
-        border-radius: 5px;
-        padding: 8px 15px;
-        border: 1px solid $color-gray;
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 3rem auto;
+      align-items: center;
 
-        &.search-input {
-          margin-right: 5px;
+      .units-radio-wrapper {
+        margin: 1rem;
 
-          &:focus {
-            border-color: $color-gray;
-          }
-        }
-
-        &.search-submit:not([disabled]) {
-          cursor: pointer;
-
-          &:hover {
-            background-color: $color-dark;
-          }
+        .label-f {
+          margin-right: 0.75rem;
         }
       }
-    }
 
-    .units-radio-wrapper {
-      margin-top: 10px;
+      form {
+        input {
+          border-radius: 5px;
+          padding: 0.5rem 1rem;
+          border: 1px solid $color-gray;
 
-      .label-f {
-        margin-right: 10px;
+          &.search-input {
+            margin-right: 0.5rem;
+
+            &:focus {
+              border-color: $color-gray;
+            }
+          }
+
+          &.search-submit:not([disabled]) {
+            cursor: pointer;
+
+            &:hover {
+              background-color: $color-dark;
+              color: #fff;
+            }
+          }
+        }
       }
     }
 
     .error-message {
       display: flex;
       justify-content: center;
-      margin: 10px auto;
+      margin: 0.75rem auto;
+      font-size: 1.3rem;
       font-weight: bold;
       color: chocolate;
     }
 
     .current-wrapper {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       align-items: center;
+      margin: 3rem auto;
 
       .current-info {
         display: flex;
         flex-direction: column;
 
         .current-temp {
-          font-size: 30px;
+          font-size: 3.5em;
         }
 
-        .current-city {
-          font-style: italic;
+        i {
+          font-size: 1.5em;
+        }
+      }
+    }
+
+    .daily-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 3rem auto;
+
+      .daily-card {
+        margin: 0 2rem 4rem 2rem;
+        text-align: center;
+
+        .temp-max {
+          font-size: 2.5em;
+        }
+
+        .temp-min {
+          font-size: 1.5em;
+          color: $color-dark;
+        }
+
+        .daily-description {
+          margin-top: 1rem;
+
+          i {
+            font-size: 1.2em;
+          }
         }
       }
     }

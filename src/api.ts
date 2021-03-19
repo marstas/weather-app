@@ -1,5 +1,5 @@
 import axios from "axios";
-import {current, daily, ipFind} from "./constants";
+import {current, onecall, ipFind} from "./constants";
 
 const weatherApi = (): WeatherApi => {
   return {
@@ -12,10 +12,10 @@ const weatherApi = (): WeatherApi => {
       }
       return res.data;
     },
-    getDaily: async (coord: Coordinates, units: string) => {
+    getOnecall: async (coord: Coordinates, units: string) => {
       let res = null;
       try {
-        res = await axios.get(`${daily}&lat=${coord.lat}&lon=${coord.lon}&units=${units}`);
+        res = await axios.get(`${onecall}&lat=${coord.lat}&lon=${coord.lon}&units=${units}`);
       } catch (error) {
         return error.toJSON();
       }
