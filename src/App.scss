@@ -37,6 +37,7 @@ body {
 
           &.search-input {
             margin-right: 0.5rem;
+            text-transform: capitalize;
 
             &:focus {
               border-color: $color-gray;
@@ -81,6 +82,48 @@ body {
 
         i {
           font-size: 1.5em;
+        }
+
+        .star {
+          height: 1em;
+          cursor: pointer;
+          margin-left: 1rem;
+        }
+      }
+
+      .bookmarks-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin: 0 3rem;
+
+        h2 {
+          align-self: center;
+        }
+
+        .bookmark {
+          text-transform: capitalize;
+          line-height: 1.5;
+
+          .bookmark-remove {
+            margin-left: 0.75rem;
+            border: 0;
+            background: transparent;
+            color: red;
+            cursor: pointer;
+          }
+
+          .bookmark-search {
+            border-radius: 5px;
+            border: 1px solid $color-gray;
+            cursor: pointer;
+
+            &:hover {
+              background-color: $color-dark;
+              color: #fff;
+            }
+          }
         }
       }
     }

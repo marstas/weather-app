@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import weatherApi from "./api";
 import {imgBase} from "./constants";
+import blackStar from "./images/star_black.svg";
+import yellowStar from "./images/star_yellow.svg";
 import "./App.scss";
 
 const api = weatherApi();
@@ -15,6 +17,8 @@ const App: React.FC = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [validInput, setValidInput] = useState<boolean>(true);
   const [toggle, setToggle] = useState<boolean>(true);
+  const [starred, setStarred] = useState<boolean>(false);
+  const [stars, setStars] = useState<string>("");
 
   useEffect(() => {
     api.getCity().then((res) => {
@@ -50,6 +54,12 @@ const App: React.FC = () => {
     setUnits(u);
   }, [toggle]);
 
+  useEffect(() => {
+    setStars(localStorage.getItem("stars"));
+    if (stars?.match(new RegExp(city, "i"))) setStarred(true);
+    else setStarred(false);
+  }, [city, stars]);
+
   const onSearchInput = (value: string) => {
     setSearchInput(value);
     setValidInput(validateInput(value));
@@ -65,6 +75,52 @@ const App: React.FC = () => {
     event.preventDefault();
   };
 
+  const handleStarClick = (bookmark: string, remove = false) => {
+    const starsSet = new Set(localStorage.getItem("stars")?.split(";") || [bookmark]);
+    if (starsSet.size === 5 && !starred && !remove) {
+      alert("Up to 5 bookmarks allowed.\nRemove a city first.");
+    } else {
+      if (starred || stars?.match(bookmark)) starsSet.delete(bookmark);
+      else starsSet.add(bookmark);
+
+      const starsArray = [...starsSet].join(";");
+      localStorage.setItem(
+        "stars",
+        starsArray.indexOf(";") === 0 ? starsArray.substring(1) : starsArray
+      );
+      setStars(starsArray);
+      if (bookmark.match(new RegExp(city, "i"))) setStarred(!starred);
+    }
+  };
+
+  const handleBookmarkClick = (bookmark: string) => {
+    const b = bookmark.substring(0, bookmark.indexOf(","));
+    setCity(b);
+    setSearchInput(b);
+  };
+
+  const renderStars = () => {
+    return (
+      stars && (
+        <div className="bookmarks-wrapper">
+          <h2>Bookmarks:</h2>
+          {stars?.split(";").map((star, indx) => {
+            return (
+              <div className="bookmark" key={indx}>
+                <button className="bookmark-search" onClick={() => handleBookmarkClick(star)}>
+                  {star}
+                </button>
+                <button className="bookmark-remove" onClick={() => handleStarClick(star, true)}>
+                  remove
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )
+    );
+  };
+
   const renderCurrent = () => {
     return (
       current && (
@@ -77,7 +133,16 @@ const App: React.FC = () => {
             <span className="current-temp">
               {`${Math.round(current.main.temp)}${units === "metric" ? "° C" : "° F"}`}
             </span>
-            <i>{`${current.name}, ${current.sys.country}`}</i>
+            <span>
+              <i>{`${current.name}, ${current.sys.country}`}</i>
+              <img
+                alt="star"
+                className="star"
+                title={starred ? "Remove from bookmarks" : "Add to bookmarks"}
+                src={starred ? yellowStar : blackStar}
+                onClick={() => handleStarClick(`${current.name}, ${current.sys.country}`)}
+              />
+            </span>
           </div>
         </>
       )
@@ -150,7 +215,10 @@ const App: React.FC = () => {
         </form>
       </header>
       <div className={`error-message ${error ? "" : "d-none"}`}>{error}</div>
-      <div className="current-wrapper">{renderCurrent()}</div>
+      <div className="current-wrapper">
+        {renderCurrent()}
+        {renderStars()}
+      </div>
       <div className="daily-wrapper">{renderDaily()}</div>
     </main>
   );
