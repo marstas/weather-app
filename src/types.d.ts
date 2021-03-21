@@ -100,3 +100,8 @@ interface WindData {
 interface IpFindData {
   city: string;
 }
+
+declare module "*.svg" {
+  const content: string;
+  export default content;
+}
