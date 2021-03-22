@@ -203,6 +203,7 @@ const App: React.FC = () => {
             type="search"
             placeholder="Enter city name..."
             value={searchInput}
+            spellCheck="false"
             onChange={(event) => onSearchInput(event.target.value)}
           />
           <input
