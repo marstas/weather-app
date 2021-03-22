@@ -13,7 +13,7 @@ body {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      margin: 3rem auto;
+      margin: 3rem auto 2rem auto;
       align-items: center;
 
       .units-radio-wrapper {
@@ -56,6 +56,36 @@ body {
       }
     }
 
+    .bookmarks-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 2rem auto;
+
+      .bookmark {
+        text-transform: capitalize;
+        line-height: 1.5;
+        margin: 0.2rem 0.4rem;
+
+        .bookmark-remove {
+          margin-left: 0.25rem;
+          height: 0.75rem;
+          cursor: pointer;
+        }
+
+        .bookmark-search {
+          border-radius: 5px;
+          border: 1px solid $color-gray;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $color-dark;
+            color: #fff;
+          }
+        }
+      }
+    }
+
     .error-message {
       display: flex;
       justify-content: center;
@@ -70,7 +100,7 @@ body {
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      margin: 3rem auto;
+      margin-bottom: 3rem;
 
       .current-info {
         display: flex;
@@ -88,42 +118,6 @@ body {
           height: 1em;
           cursor: pointer;
           margin-left: 1rem;
-        }
-      }
-
-      .bookmarks-wrapper {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        margin: 0 3rem;
-
-        h2 {
-          align-self: center;
-        }
-
-        .bookmark {
-          text-transform: capitalize;
-          line-height: 1.5;
-
-          .bookmark-remove {
-            margin-left: 0.75rem;
-            border: 0;
-            background: transparent;
-            color: red;
-            cursor: pointer;
-          }
-
-          .bookmark-search {
-            border-radius: 5px;
-            border: 1px solid $color-gray;
-            cursor: pointer;
-
-            &:hover {
-              background-color: $color-dark;
-              color: #fff;
-            }
-          }
         }
       }
     }

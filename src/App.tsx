@@ -101,23 +101,23 @@ const App: React.FC = () => {
 
   const renderStars = () => {
     return (
-      stars && (
-        <div className="bookmarks-wrapper">
-          <h2>Bookmarks:</h2>
-          {stars?.split(";").map((star, indx) => {
-            return (
-              <div className="bookmark" key={indx}>
-                <button className="bookmark-search" onClick={() => handleBookmarkClick(star)}>
-                  {star}
-                </button>
-                <button className="bookmark-remove" onClick={() => handleStarClick(star, true)}>
-                  remove
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )
+      stars &&
+      stars?.split(";").map((star, indx) => {
+        return (
+          <div className="bookmark" key={indx}>
+            <button className="bookmark-search" onClick={() => handleBookmarkClick(star)}>
+              {star}
+            </button>
+            <img
+              alt="remove bookmark"
+              className="bookmark-remove"
+              title="Remove from bookmarks"
+              src={yellowStar}
+              onClick={() => handleStarClick(star, true)}
+            />
+          </div>
+        );
+      })
     );
   };
 
@@ -215,10 +215,8 @@ const App: React.FC = () => {
         </form>
       </header>
       <div className={`error-message ${error ? "" : "d-none"}`}>{error}</div>
-      <div className="current-wrapper">
-        {renderCurrent()}
-        {renderStars()}
-      </div>
+      <div className="bookmarks-wrapper">{renderStars()}</div>
+      <div className="current-wrapper">{renderCurrent()}</div>
       <div className="daily-wrapper">{renderDaily()}</div>
     </main>
   );
