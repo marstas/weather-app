@@ -7,18 +7,18 @@ import "./App.scss";
 
 const api = weatherApi();
 
-const App: React.FC = () => {
-  const [current, setCurrent] = useState<CurrentInfo>(null);
-  const [onecall, setOnecall] = useState<OnecallInfo>(null);
-  const [error, setError] = useState<string>("");
-  const [units, setUnits] = useState<string>("metric");
-  const [city, setCity] = useState<string>("");
-  const [coord, setCoord] = useState<Coordinates>(null);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [validInput, setValidInput] = useState<boolean>(true);
-  const [toggle, setToggle] = useState<boolean>(true);
-  const [starred, setStarred] = useState<boolean>(false);
-  const [stars, setStars] = useState<string>("");
+export default function App(): JSX.Element {
+  const [current, setCurrent] = useState<CurrentInfo | null>(null);
+  const [onecall, setOnecall] = useState<OnecallInfo | null>(null);
+  const [coord, setCoord] = useState<Coordinates | null>(null);
+  const [error, setError] = useState("");
+  const [units, setUnits] = useState("metric");
+  const [city, setCity] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [validInput, setValidInput] = useState(true);
+  const [toggle, setToggle] = useState(true);
+  const [starred, setStarred] = useState(false);
+  const [stars, setStars] = useState<string | null>("");
 
   useEffect(() => {
     api.getCity().then((res) => {
@@ -70,7 +70,7 @@ const App: React.FC = () => {
     else return true;
   };
 
-  const handleSearchSubmit = (event) => {
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     setCity(searchInput);
     event.preventDefault();
   };
@@ -83,7 +83,7 @@ const App: React.FC = () => {
       if (starred || stars?.match(bookmark)) starsSet.delete(bookmark);
       else starsSet.add(bookmark);
 
-      const starsArray = [...starsSet].join(";");
+      const starsArray = [...Array.from(starsSet)].join(";");
       localStorage.setItem(
         "stars",
         starsArray.indexOf(";") === 0 ? starsArray.substring(1) : starsArray
@@ -151,7 +151,8 @@ const App: React.FC = () => {
 
   const renderDaily = () => {
     return (
-      onecall?.daily.length > 0 &&
+      onecall &&
+      onecall.daily.length > 0 &&
       onecall.daily.map((d, indx) => {
         return (
           <div key={indx} className="daily-card">
@@ -221,6 +222,4 @@ const App: React.FC = () => {
       <div className="daily-wrapper">{renderDaily()}</div>
     </main>
   );
-};
-
-export default App;
+}
