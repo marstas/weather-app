@@ -1,7 +1,7 @@
 {
   "name": "weather-app",
-  "description": "Check the weather info",
-  "version": "1.0.0",
+  "description": "Weather info app, built using React with TypeScript",
+  "version": "0.1.0",
   "main": "src/index.tsx",
   "repository": "https://github.com/marstas/weather-app.git",
   "license": "MIT",
