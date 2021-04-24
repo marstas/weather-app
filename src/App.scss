@@ -1,5 +1,6 @@
-$color-gray: #e0e0e0;
-$color-dark: #8a8989;
+$color-white: #fff;
+$color-light: #e0e0e0;
+$color-gray: #8a8989;
 
 body {
   .d-none {
@@ -33,14 +34,14 @@ body {
         input {
           border-radius: 5px;
           padding: 0.5rem 1rem;
-          border: 1px solid $color-gray;
+          border: 1px solid $color-light;
 
           &.search-input {
             margin-right: 0.5rem;
             text-transform: capitalize;
 
             &:focus {
-              border-color: $color-gray;
+              border-color: $color-light;
             }
           }
 
@@ -48,8 +49,8 @@ body {
             cursor: pointer;
 
             &:hover {
-              background-color: $color-dark;
-              color: #fff;
+              background-color: $color-gray;
+              color: $color-white;
             }
           }
         }
@@ -75,12 +76,12 @@ body {
 
         .bookmark-search {
           border-radius: 5px;
-          border: 1px solid $color-gray;
+          border: 1px solid $color-light;
           cursor: pointer;
 
           &:hover {
-            background-color: $color-dark;
-            color: #fff;
+            background-color: $color-gray;
+            color: $color-white;
           }
         }
       }
@@ -131,7 +132,7 @@ body {
       .daily-card {
         margin: 0 1rem 4rem 1rem;
         text-align: center;
-        box-shadow: 0 2px 6px 1px $color-gray;
+        box-shadow: 0 2px 6px 1px $color-light;
         padding: 1.2rem;
 
         .temp-max {
@@ -140,7 +141,7 @@ body {
 
         .temp-min {
           font-size: 1.5em;
-          color: $color-dark;
+          color: $color-gray;
         }
 
         .daily-description {
