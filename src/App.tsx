@@ -3,10 +3,11 @@ import weatherApi, { Coordinates, CurrentData, ForecastData } from "./api";
 import { imgBase } from "./constants";
 import blackStar from "./assets/star_black.svg";
 import yellowStar from "./assets/star_yellow.svg";
-import "./App.scss";
-import UnitToggle from "./components/UnitToggle";
 import { isValidSearchInput } from "./utils";
+import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";
+
+import "./App.scss";
 
 const api = weatherApi();
 
@@ -15,7 +16,6 @@ export default function App(): JSX.Element {
   const [forecast, setForecast] = useState<ForecastData | null>(null);
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const [city, setCity] = useState("");
-  const [error, setError] = useState("");
   const [units, setUnits] = useState("metric");
   const [searchInput, setSearchInput] = useState("");
   const [starred, setStarred] = useState(false);
@@ -36,11 +36,9 @@ export default function App(): JSX.Element {
         if (res.name !== "Error") {
           setCurrent(res);
           setCoords({ lat: res.coord.lat, lon: res.coord.lon });
-          setError("");
         } else {
           setCurrent(null);
           setForecast(null);
-          setError(`City "${city}" was not found`);
         }
       });
   }, [city, units]);
@@ -190,7 +188,9 @@ export default function App(): JSX.Element {
           onSearchSubmit={handleSearchSubmit}
         />
       </header>
-      <div className={`error-message ${error ? "" : "d-none"}`}>{error}</div>
+      <div className={`error-message ${!current ? "" : "d-none"}`}>
+        {`City "${city}" was not found`}
+      </div>
       <div className="bookmarks-wrapper">{renderStars()}</div>
       <div className="current-wrapper">{renderCurrent()}</div>
       <div className="daily-wrapper">{renderDaily()}</div>
