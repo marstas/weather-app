@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import weatherApi from "./api";
-import {imgBase} from "./constants";
-import blackStar from "./images/star_black.svg";
-import yellowStar from "./images/star_yellow.svg";
+import { imgBase } from "./constants";
+import blackStar from "./assets/star_black.svg";
+import yellowStar from "./assets/star_yellow.svg";
 import "./App.scss";
 
 const api = weatherApi();
@@ -34,7 +34,7 @@ export default function App(): JSX.Element {
       api.getCurrent(city, units).then((res) => {
         if (res.name !== "Error") {
           setCurrent(res);
-          setCoord({lat: res.coord.lat, lon: res.coord.lon});
+          setCoord({ lat: res.coord.lat, lon: res.coord.lon });
           setError("");
         } else {
           setCurrent(null);
