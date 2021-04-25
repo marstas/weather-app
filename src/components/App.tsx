@@ -15,6 +15,7 @@ export default function App(): JSX.Element {
   const [current, setCurrent] = useState<CurrentData | null>(null);
   const [forecast, setForecast] = useState<ForecastData | null>(null);
   const [coords, setCoords] = useState<Coordinates | null>(null);
+  const [apiError, setApiError] = useState("");
   const [city, setCity] = useState("");
   const [units, setUnits] = useState("metric");
   const [searchInput, setSearchInput] = useState("");
@@ -36,9 +37,11 @@ export default function App(): JSX.Element {
         if (res.name !== "Error") {
           setCurrent(res);
           setCoords({ lat: res.coord.lat, lon: res.coord.lon });
+          setApiError("");
         } else {
           setCurrent(null);
           setForecast(null);
+          setApiError(`City "${city}" was not found`);
         }
       });
   }, [city, units]);
@@ -188,9 +191,7 @@ export default function App(): JSX.Element {
           onSearchSubmit={handleSearchSubmit}
         />
       </header>
-      <div className={`error-message ${!current ? "" : "d-none"}`}>
-        {`City "${city}" was not found`}
-      </div>
+      <div className={`error-message ${apiError ? "" : "d-none"}`}>{apiError}</div>
       <div className="bookmarks-wrapper">{renderStars()}</div>
       <div className="current-wrapper">{renderCurrent()}</div>
       <div className="daily-wrapper">{renderDaily()}</div>
