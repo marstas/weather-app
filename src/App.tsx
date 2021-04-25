@@ -5,6 +5,8 @@ import blackStar from "./assets/star_black.svg";
 import yellowStar from "./assets/star_yellow.svg";
 import "./App.scss";
 import UnitToggle from "./components/UnitToggle";
+import { isValidSearchInput } from "./utils";
+import SearchBar from "./components/SearchBar";
 
 const api = weatherApi();
 
@@ -16,7 +18,6 @@ export default function App(): JSX.Element {
   const [error, setError] = useState("");
   const [units, setUnits] = useState("metric");
   const [searchInput, setSearchInput] = useState("");
-  const [validInput, setValidInput] = useState(true);
   const [starred, setStarred] = useState(false);
   const [stars, setStars] = useState<string | null>(null);
 
@@ -55,21 +56,6 @@ export default function App(): JSX.Element {
     else setStarred(false);
   }, [city, stars]);
 
-  const onSearchInput = (value: string) => {
-    setSearchInput(value);
-    setValidInput(validateInput(value));
-  };
-
-  const validateInput = (value: string) => {
-    if (value.match(/[0-9$&+,:;=?@#|'<>.^*()%!~[{\\}/\]-]/)) return false;
-    else return true;
-  };
-
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    setCity(searchInput);
-    event.preventDefault();
-  };
-
   const handleStarClick = (bookmark: string, remove = false) => {
     const starsSet = new Set(localStorage.getItem("stars")?.split(";") || [bookmark]);
     if (starsSet.size === 5 && !starred && !remove) {
@@ -97,6 +83,15 @@ export default function App(): JSX.Element {
   const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === "toggle-f") setUnits("imperial");
     else setUnits("metric");
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    setCity(searchInput);
+    event.preventDefault();
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
   };
 
   const renderStars = () => {
@@ -188,23 +183,12 @@ export default function App(): JSX.Element {
             onUnitChange={handleUnitChange}
           />
         </div>
-        <form onSubmit={handleSearchSubmit}>
-          <input
-            className="search-input"
-            type="search"
-            placeholder="Enter city name..."
-            value={searchInput}
-            spellCheck="false"
-            onChange={(event) => onSearchInput(event.target.value)}
-          />
-          <input
-            className="search-submit"
-            type="submit"
-            value="Search"
-            disabled={!validInput || !searchInput}
-            title={validInput ? "Search" : "Numbers and special characters are not allowed"}
-          />
-        </form>
+        <SearchBar
+          input={searchInput}
+          disabled={!isValidSearchInput(searchInput)}
+          onSearchChange={handleSearchChange}
+          onSearchSubmit={handleSearchSubmit}
+        />
       </header>
       <div className={`error-message ${error ? "" : "d-none"}`}>{error}</div>
       <div className="bookmarks-wrapper">{renderStars()}</div>
