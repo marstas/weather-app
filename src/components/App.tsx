@@ -6,7 +6,7 @@ import yellowStar from "../assets/star_yellow.svg";
 import { isValidSearchInput } from "../utils";
 import UnitToggle from "./UnitToggle";
 import SearchBar from "./SearchBar";
-
+import DailyCard from "./DailyCard";
 import "./App.scss";
 
 const api = weatherApi();
@@ -145,30 +145,6 @@ export default function App(): JSX.Element {
     );
   };
 
-  const renderDaily = () => {
-    return (
-      forecast &&
-      forecast.daily.length > 0 &&
-      forecast.daily.map((d, indx) => {
-        return (
-          <div key={indx} className="daily-card">
-            <div>{new Date(d.dt * 1000).toUTCString().slice(0, 7)}</div>
-            <img alt={d.weather[0].description} src={`${imgBase}${d.weather[0].icon}@2x.png`} />
-            <div>
-              <span className="temp-max">{Math.round(d.temp.max)}°&nbsp;</span>
-              <span className="temp-min">
-                <sup>{Math.round(d.temp.min)}°</sup>
-              </span>
-            </div>
-            <div className="daily-description">
-              <i>{d.weather[0].description}</i>
-            </div>
-          </div>
-        );
-      })
-    );
-  };
-
   return (
     <main>
       <header>
@@ -194,7 +170,11 @@ export default function App(): JSX.Element {
       <div className={`error-message ${apiError ? "" : "d-none"}`}>{apiError}</div>
       <div className="bookmarks-wrapper">{renderStars()}</div>
       <div className="current-wrapper">{renderCurrent()}</div>
-      <div className="daily-wrapper">{renderDaily()}</div>
+      <div className="forecast-wrapper">
+        {forecast?.daily.map((card) => (
+          <DailyCard key={card.dt} data={card} />
+        ))}
+      </div>
     </main>
   );
 }
