@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import weatherApi from "./api";
+import weatherApi, { Coordinates, CurrentData, ForecastData } from "./api";
 import { imgBase } from "./constants";
 import blackStar from "./assets/star_black.svg";
 import yellowStar from "./assets/star_yellow.svg";
@@ -8,17 +8,17 @@ import "./App.scss";
 const api = weatherApi();
 
 export default function App(): JSX.Element {
-  const [current, setCurrent] = useState<CurrentInfo | null>(null);
-  const [onecall, setOnecall] = useState<OnecallInfo | null>(null);
-  const [coord, setCoord] = useState<Coordinates | null>(null);
+  const [current, setCurrent] = useState<CurrentData | null>(null);
+  const [forecast, setForecast] = useState<ForecastData | null>(null);
+  const [coords, setCoords] = useState<Coordinates | null>(null);
+  const [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [units, setUnits] = useState("metric");
-  const [city, setCity] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [validInput, setValidInput] = useState(true);
   const [toggle, setToggle] = useState(true);
   const [starred, setStarred] = useState(false);
-  const [stars, setStars] = useState<string | null>("");
+  const [stars, setStars] = useState<string | null>(null);
 
   useEffect(() => {
     api.getCity().then((res) => {
@@ -34,20 +34,20 @@ export default function App(): JSX.Element {
       api.getCurrent(city, units).then((res) => {
         if (res.name !== "Error") {
           setCurrent(res);
-          setCoord({ lat: res.coord.lat, lon: res.coord.lon });
+          setCoords({ lat: res.coord.lat, lon: res.coord.lon });
           setError("");
         } else {
           setCurrent(null);
-          setOnecall(null);
+          setForecast(null);
           setError(`City "${city}" was not found`);
         }
       });
   }, [city, units]);
 
   useEffect(() => {
-    if (units && coord) api.getOnecall(coord, units).then((res) => setOnecall(res));
-    return () => setCoord(null); // cleanup to avoid double API calls
-  }, [coord, units]);
+    if (units && coords) api.getForecast(coords, units).then((res) => setForecast(res));
+    return () => setCoords(null); // cleanup to avoid double API calls
+  }, [coords, units]);
 
   useEffect(() => {
     const u = toggle ? "metric" : "imperial";
@@ -151,9 +151,9 @@ export default function App(): JSX.Element {
 
   const renderDaily = () => {
     return (
-      onecall &&
-      onecall.daily.length > 0 &&
-      onecall.daily.map((d, indx) => {
+      forecast &&
+      forecast.daily.length > 0 &&
+      forecast.daily.map((d, indx) => {
         return (
           <div key={indx} className="daily-card">
             <div>{new Date(d.dt * 1000).toUTCString().slice(0, 7)}</div>

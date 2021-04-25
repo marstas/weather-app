@@ -1,6 +1,49 @@
 import axios from "axios";
 import { current, onecall, ipFind } from "./constants";
 
+type WeatherApi = {
+  getCurrent: (city: string, units: string) => Promise<CurrentData>;
+  getForecast: (coords: Coordinates, units: string) => Promise<ForecastData>;
+  getCity: () => Promise<IpFindData>;
+};
+
+type IpFindData = {
+  city: string;
+};
+
+export type Coordinates = {
+  lat: number;
+  lon: number;
+};
+
+export type CurrentData = {
+  name: string;
+  coord: Coordinates;
+  main: {
+    temp: number;
+  };
+  sys: {
+    country: string;
+  };
+  weather: WeatherData[];
+};
+
+export type ForecastData = {
+  daily: {
+    dt: number;
+    temp: {
+      min: number;
+      max: number;
+    };
+    weather: WeatherData[];
+  }[];
+};
+
+export type WeatherData = {
+  description: string;
+  icon: string;
+};
+
 export default function weatherApi(): WeatherApi {
   return {
     getCurrent: async (city: string, units: string) => {
@@ -11,9 +54,11 @@ export default function weatherApi(): WeatherApi {
         return error.toJSON();
       }
     },
-    getOnecall: async (coord: Coordinates, units: string) => {
+    getForecast: async (coords: Coordinates, units: string) => {
       try {
-        const res = await axios.get(`${onecall}&lat=${coord.lat}&lon=${coord.lon}&units=${units}`);
+        const res = await axios.get(
+          `${onecall}&lat=${coords.lat}&lon=${coords.lon}&units=${units}`
+        );
         return res.data;
       } catch (error) {
         return error.toJSON();
