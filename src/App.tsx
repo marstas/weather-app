@@ -83,7 +83,7 @@ export default function App(): JSX.Element {
       if (starred || stars?.match(bookmark)) starsSet.delete(bookmark);
       else starsSet.add(bookmark);
 
-      const starsArray = [...Array.from(starsSet)].join(";");
+      const starsArray = Array.from(starsSet).join(";");
       localStorage.setItem(
         "stars",
         starsArray.indexOf(";") === 0 ? starsArray.substring(1) : starsArray
