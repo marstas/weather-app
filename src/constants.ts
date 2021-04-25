@@ -5,4 +5,4 @@ const onecall = `https://api.openweathermap.org/data/2.5/onecall?appid=${weather
 const imgBase = "https://openweathermap.org/img/wn/";
 const ipFind = `https://ipfind.co/me?auth=${ipFindApiKey}`;
 
-export {current, onecall, imgBase, ipFind};
+export { current, onecall, imgBase, ipFind };

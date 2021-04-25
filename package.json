@@ -1,12 +1,11 @@
 {
   "name": "weather-app",
-  "description": "Check the weather info",
-  "version": "1.0.0",
+  "description": "Weather info app, built using React with TypeScript",
+  "version": "0.1.0",
   "main": "src/index.tsx",
   "repository": "https://github.com/marstas/weather-app.git",
   "license": "MIT",
   "private": true,
-  "types": "types.d.ts",
   "scripts": {
     "start": "webpack-cli serve --mode=development --env development --open --hot",
     "build": "webpack --mode=production --env production --progress",

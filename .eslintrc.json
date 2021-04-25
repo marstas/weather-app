@@ -4,11 +4,7 @@
   "env": {
     "browser": true
   },
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:react/recommended"],
   "parserOptions": {
     "project": ["tsconfig.json"],
     "ecmaVersion": 2020,
@@ -19,7 +15,7 @@
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", {"ignoreRestSiblings": true}],
+    "@typescript-eslint/no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
     "react/jsx-filename-extension": [
       "warn",
       {
@@ -29,7 +25,7 @@
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-shadow": ["error", {"builtinGlobals": false, "hoist": "functions", "allow": []}]
+    "no-shadow": ["error", { "builtinGlobals": false, "hoist": "functions", "allow": [] }]
   },
   "settings": {
     "react": {
