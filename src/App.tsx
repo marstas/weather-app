@@ -4,6 +4,7 @@ import { imgBase } from "./constants";
 import blackStar from "./assets/star_black.svg";
 import yellowStar from "./assets/star_yellow.svg";
 import "./App.scss";
+import UnitToggle from "./components/UnitToggle";
 
 const api = weatherApi();
 
@@ -16,7 +17,6 @@ export default function App(): JSX.Element {
   const [units, setUnits] = useState("metric");
   const [searchInput, setSearchInput] = useState("");
   const [validInput, setValidInput] = useState(true);
-  const [toggle, setToggle] = useState(true);
   const [starred, setStarred] = useState(false);
   const [stars, setStars] = useState<string | null>(null);
 
@@ -48,11 +48,6 @@ export default function App(): JSX.Element {
     if (units && coords) api.getForecast(coords, units).then((res) => setForecast(res));
     return () => setCoords(null); // cleanup to avoid double API calls
   }, [coords, units]);
-
-  useEffect(() => {
-    const u = toggle ? "metric" : "imperial";
-    setUnits(u);
-  }, [toggle]);
 
   useEffect(() => {
     setStars(localStorage.getItem("stars"));
@@ -97,6 +92,11 @@ export default function App(): JSX.Element {
     const b = bookmark.substring(0, bookmark.indexOf(","));
     setCity(b);
     setSearchInput(b);
+  };
+
+  const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.id === "toggle-f") setUnits("imperial");
+    else setUnits("metric");
   };
 
   const renderStars = () => {
@@ -177,26 +177,16 @@ export default function App(): JSX.Element {
     <main>
       <header>
         <div className="units-radio-wrapper">
-          <input
-            type="radio"
-            id="toggle-f"
-            name="toggle-f"
-            onChange={() => setToggle(!toggle)}
-            checked={!toggle}
+          <UnitToggle
+            system="imperial"
+            isChecked={units === "imperial"}
+            onUnitChange={handleUnitChange}
           />
-          <label htmlFor="toggle-f" className="label-f">
-            &nbsp;° F
-          </label>
-          <input
-            type="radio"
-            id="toggle-c"
-            name="toggle-c"
-            onChange={() => setToggle(!toggle)}
-            checked={toggle}
+          <UnitToggle
+            system="metric"
+            isChecked={units === "metric"}
+            onUnitChange={handleUnitChange}
           />
-          <label htmlFor="toggle-c" className="label-c">
-            &nbsp;° C
-          </label>
         </div>
         <form onSubmit={handleSearchSubmit}>
           <input
