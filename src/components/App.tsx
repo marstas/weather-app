@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import weatherApi, { Coordinates, CurrentData, ForecastData } from "./api";
-import { imgBase } from "./constants";
-import blackStar from "./assets/star_black.svg";
-import yellowStar from "./assets/star_yellow.svg";
-import { isValidSearchInput } from "./utils";
-import UnitToggle from "./components/UnitToggle";
-import SearchBar from "./components/SearchBar";
+import weatherApi, { Coordinates, CurrentData, ForecastData } from "../api";
+import { imgBase } from "../constants";
+import blackStar from "../assets/star_black.svg";
+import yellowStar from "../assets/star_yellow.svg";
+import { isValidSearchInput } from "../utils";
+import UnitToggle from "./UnitToggle";
+import SearchBar from "./SearchBar";
 
 import "./App.scss";
 
