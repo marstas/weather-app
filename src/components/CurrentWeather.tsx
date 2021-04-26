@@ -5,7 +5,7 @@ import { imgBase } from "../constants";
 import blackStar from "../assets/star_black.svg";
 import yellowStar from "../assets/star_yellow.svg";
 
-type CurrentProps = {
+type CurrentWeatherProps = {
   data: CurrentData;
   units: string;
   city: string;
@@ -13,13 +13,13 @@ type CurrentProps = {
   onStarClick: (bookmark: string, remove?: boolean) => void;
 };
 
-export default function Current({
+export default function CurrentWeather({
   data,
   units,
   city,
   bookmarks,
   onStarClick
-}: CurrentProps): JSX.Element {
+}: CurrentWeatherProps): JSX.Element {
   const bookmarked = isCityBookmarked(bookmarks, city);
 
   return (

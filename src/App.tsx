@@ -4,14 +4,14 @@ import { isCityBookmarked, isValidSearchInput } from "./utils";
 import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";
 import DailyCard from "./components/DailyCard";
-import Current from "./components/Current";
+import CurrentWeather from "./components/CurrentWeather";
 import Bookmark from "./components/Bookmark";
 import "./App.scss";
 
 const api = weatherApi();
 
 export default function App(): JSX.Element {
-  const [current, setCurrent] = useState<CurrentData | null>(null);
+  const [currentWeather, setCurrentWeather] = useState<CurrentData | null>(null);
   const [forecast, setForecast] = useState<ForecastData | null>(null);
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const [apiError, setApiError] = useState("");
@@ -21,7 +21,7 @@ export default function App(): JSX.Element {
   const [bookmarks, setBookmarks] = useState<string | null>(localStorage.getItem("stars"));
 
   useEffect(() => {
-    api.getCity().then((res) => {
+    api.getCurrentLocation().then((res) => {
       if (res.city) {
         setCity(res.city);
         setSearchInput(res.city);
@@ -31,13 +31,13 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     if (units && city)
-      api.getCurrent(city, units).then((res) => {
+      api.getCurrentWeather(city, units).then((res) => {
         if (res.name !== "Error") {
-          setCurrent(res);
+          setCurrentWeather(res);
           setCoords({ lat: res.coord.lat, lon: res.coord.lon });
           setApiError("");
         } else {
-          setCurrent(null);
+          setCurrentWeather(null);
           setForecast(null);
           setApiError(`City "${city}" was not found`);
         }
@@ -129,10 +129,10 @@ export default function App(): JSX.Element {
             )}
         </div>
       )}
-      {current && (
+      {currentWeather && (
         <div className="current-wrapper">
-          <Current
-            data={current}
+          <CurrentWeather
+            data={currentWeather}
             units={units}
             city={city}
             bookmarks={bookmarks}
