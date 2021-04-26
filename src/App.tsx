@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Api, { Coordinates, CurrentData, ForecastData } from "./Api";
+import Api from "./Api";
+import { Coordinates, CurrentData, ForecastData } from "./models";
 import { isCityBookmarked, isValidSearchInput } from "./utils";
 import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";

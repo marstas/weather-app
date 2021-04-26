@@ -1,6 +1,6 @@
 import React from "react";
-import { imgBase } from "../constants";
-import { DailyData } from "../Api";
+import { imgBase } from "../Api";
+import { DailyData } from "../models";
 
 type DailyCardProps = {
   data: DailyData;
