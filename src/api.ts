@@ -29,14 +29,16 @@ export type CurrentData = {
 };
 
 export type ForecastData = {
-  daily: {
-    dt: number;
-    temp: {
-      min: number;
-      max: number;
-    };
-    weather: WeatherData[];
-  }[];
+  daily: DailyData[];
+};
+
+export type DailyData = {
+  dt: number;
+  temp: {
+    min: number;
+    max: number;
+  };
+  weather: WeatherData[];
 };
 
 export type WeatherData = {

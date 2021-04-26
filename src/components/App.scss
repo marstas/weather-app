@@ -20,13 +20,12 @@ body {
       .units-radio-wrapper {
         margin: 1rem;
 
-        .label-f {
-          margin-right: 0.75rem;
+        label {
           cursor: pointer;
-        }
 
-        .label-c {
-          cursor: pointer;
+          &[for="toggle-f"] {
+            margin-right: 0.75rem;
+          }
         }
       }
 
@@ -123,7 +122,7 @@ body {
       }
     }
 
-    .daily-wrapper {
+    .forecast-wrapper {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
