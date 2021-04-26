@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import weatherApi, { Coordinates, CurrentData, ForecastData } from "../api";
-import { isCityBookmarked, isValidSearchInput } from "../utils";
-import UnitToggle from "./UnitToggle";
-import SearchBar from "./SearchBar";
-import DailyCard from "./DailyCard";
-import Current from "./Current";
-import Bookmark from "./Bookmark";
+import weatherApi, { Coordinates, CurrentData, ForecastData } from "./api";
+import { isCityBookmarked, isValidSearchInput } from "./utils";
+import UnitToggle from "./components/UnitToggle";
+import SearchBar from "./components/SearchBar";
+import DailyCard from "./components/DailyCard";
+import Current from "./components/Current";
+import Bookmark from "./components/Bookmark";
 import "./App.scss";
 
 const api = weatherApi();
@@ -55,8 +55,8 @@ export default function App(): JSX.Element {
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    setCity(searchInput);
     event.preventDefault();
+    setCity(searchInput);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
