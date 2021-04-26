@@ -17,13 +17,14 @@ export default function UnitToggle({
   return (
     <>
       <input
+        data-testid="unit-radio"
         type="radio"
         id={id}
         name={id}
         onChange={(event) => onUnitChange(event)}
         checked={isChecked}
       />
-      <label htmlFor={id}>{` ° ${isImperial ? "F" : "C"}`}</label>
+      <label data-testid="unit-label" htmlFor={id}>{` ° ${isImperial ? "F" : "C"}`}</label>
     </>
   );
 }
