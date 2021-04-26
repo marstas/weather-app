@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import weatherApi, { Coordinates, CurrentData, ForecastData } from "./api";
+import Api, { Coordinates, CurrentData, ForecastData } from "./Api";
 import { isCityBookmarked, isValidSearchInput } from "./utils";
 import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";
@@ -7,8 +7,6 @@ import DailyCard from "./components/DailyCard";
 import CurrentWeather from "./components/CurrentWeather";
 import Bookmark from "./components/Bookmark";
 import "./App.scss";
-
-const api = weatherApi();
 
 export default function App(): JSX.Element {
   const [currentWeather, setCurrentWeather] = useState<CurrentData | null>(null);
@@ -21,7 +19,7 @@ export default function App(): JSX.Element {
   const [bookmarks, setBookmarks] = useState<string | null>(localStorage.getItem("stars"));
 
   useEffect(() => {
-    api.getCurrentLocation().then((res) => {
+    Api.getCurrentLocation().then((res) => {
       if (res.city) {
         setCity(res.city);
         setSearchInput(res.city);
@@ -31,7 +29,7 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     if (units && city)
-      api.getCurrentWeather(city, units).then((res) => {
+      Api.getCurrentWeather(city, units).then((res) => {
         if (res.name !== "Error") {
           setCurrentWeather(res);
           setCoords({ lat: res.coord.lat, lon: res.coord.lon });
@@ -45,7 +43,7 @@ export default function App(): JSX.Element {
   }, [city, units]);
 
   useEffect(() => {
-    if (units && coords) api.getForecast(coords, units).then((res) => setForecast(res));
+    if (units && coords) Api.getForecast(coords, units).then((res) => setForecast(res));
     return () => setCoords(null); // cleanup to avoid double API calls
   }, [coords, units]);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { isCityBookmarked } from "../utils";
-import { CurrentData } from "../api";
+import { CurrentData } from "../Api";
 import { imgBase } from "../constants";
 import blackStar from "../assets/star_black.svg";
 import yellowStar from "../assets/star_yellow.svg";
