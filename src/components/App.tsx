@@ -74,12 +74,12 @@ export default function App(): JSX.Element {
       if (bookmarked || bookmarks?.match(bookmark)) bookmarkSet.delete(bookmark);
       else bookmarkSet.add(bookmark);
 
-      const bookmarkArray = Array.from(bookmarkSet).join(";");
+      const bookmarkString = Array.from(bookmarkSet).join(";");
       localStorage.setItem(
         "stars",
-        bookmarkArray.indexOf(";") === 0 ? bookmarkArray.substring(1) : bookmarkArray
+        bookmarkString.indexOf(";") === 0 ? bookmarkString.substring(1) : bookmarkString
       );
-      setBookmarks(bookmarkArray);
+      setBookmarks(bookmarkString);
     }
   };
 
