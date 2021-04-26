@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Api from "./Api";
-import { Coordinates, CurrentData, ForecastData } from "./models";
+import { Coordinates, CurrentData, ForecastData, Units } from "./models";
 import { isCityBookmarked, isValidSearchInput } from "./utils";
 import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";
@@ -15,7 +15,7 @@ export default function App(): JSX.Element {
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const [apiError, setApiError] = useState("");
   const [city, setCity] = useState("");
-  const [units, setUnits] = useState("metric");
+  const [units, setUnits] = useState(Units.Metric);
   const [searchInput, setSearchInput] = useState("");
   const [bookmarks, setBookmarks] = useState<string | null>(localStorage.getItem("stars"));
 
@@ -29,7 +29,7 @@ export default function App(): JSX.Element {
   }, []); // get location/weather info on first load
 
   useEffect(() => {
-    if (units && city)
+    if (city)
       Api.getCurrentWeather(city, units).then((res) => {
         if (res.name !== "Error") {
           setCurrentWeather(res);
@@ -44,13 +44,13 @@ export default function App(): JSX.Element {
   }, [city, units]);
 
   useEffect(() => {
-    if (units && coords) Api.getForecast(coords, units).then((res) => setForecast(res));
+    if (coords) Api.getForecast(coords, units).then((res) => setForecast(res));
     return () => setCoords(null); // cleanup to avoid double API calls
   }, [coords, units]);
 
   const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.id === "toggle-f") setUnits("imperial");
-    else setUnits("metric");
+    if (event.target.name === "toggle-f") setUnits(Units.Imperial);
+    else setUnits(Units.Metric);
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -94,18 +94,18 @@ export default function App(): JSX.Element {
         <div className="units-radio-wrapper">
           <UnitToggle
             system="imperial"
-            isChecked={units === "imperial"}
+            isChecked={units === Units.Imperial}
             onUnitChange={handleUnitChange}
           />
           <UnitToggle
             system="metric"
-            isChecked={units === "metric"}
+            isChecked={units === Units.Metric}
             onUnitChange={handleUnitChange}
           />
         </div>
         <SearchBar
           input={searchInput}
-          disabled={!isValidSearchInput(searchInput)}
+          isDisabled={!isValidSearchInput(searchInput)}
           onSearchChange={handleSearchChange}
           onSearchSubmit={handleSearchSubmit}
         />

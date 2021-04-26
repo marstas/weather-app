@@ -12,19 +12,19 @@ export default function UnitToggle({
   onUnitChange
 }: UnitToggleProps): JSX.Element {
   const isImperial = system === "imperial";
-  const id = isImperial ? "toggle-f" : "toggle-c";
+  const name = isImperial ? "toggle-f" : "toggle-c";
 
   return (
     <>
       <input
         data-testid="unit-radio"
         type="radio"
-        id={id}
-        name={id}
+        id={name}
+        name={name}
         onChange={(event) => onUnitChange(event)}
         checked={isChecked}
       />
-      <label data-testid="unit-label" htmlFor={id}>{` ° ${isImperial ? "F" : "C"}`}</label>
+      <label data-testid="unit-label" htmlFor={name}>{` ° ${isImperial ? "F" : "C"}`}</label>
     </>
   );
 }

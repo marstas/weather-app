@@ -2,14 +2,14 @@ import React from "react";
 
 type SearchBarProps = {
   input: string;
-  disabled: boolean;
+  isDisabled: boolean;
   onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export default function SearchBar({
   input,
-  disabled,
+  isDisabled,
   onSearchChange,
   onSearchSubmit
 }: SearchBarProps): JSX.Element {
@@ -27,8 +27,8 @@ export default function SearchBar({
         className="search-submit"
         type="submit"
         value="Search"
-        disabled={disabled}
-        title={disabled ? "Numbers and special characters are not allowed" : "Search"}
+        disabled={isDisabled}
+        title={isDisabled ? "Numbers and special characters are not allowed" : "Search"}
       />
     </form>
   );

@@ -1,13 +1,13 @@
 import React from "react";
 import { isCityBookmarked } from "../utils";
-import { CurrentData } from "../models";
+import { CurrentData, Units } from "../models";
 import { imgBase } from "../Api";
 import blackStar from "../assets/star_black.svg";
 import yellowStar from "../assets/star_yellow.svg";
 
 type CurrentWeatherProps = {
   data: CurrentData;
-  units: string;
+  units: Units;
   city: string;
   bookmarks: string | null;
   onStarClick: (bookmark: string, remove?: boolean) => void;
@@ -27,7 +27,7 @@ export default function CurrentWeather({
       <img alt={data.weather[0].description} src={`${imgBase}${data.weather[0].icon}@4x.png`} />
       <div className="current-info">
         <span className="current-temp">
-          {`${Math.round(data.main.temp)}${units === "metric" ? "° C" : "° F"}`}
+          {`${Math.round(data.main.temp)}${units === Units.Metric ? "° C" : "° F"}`}
         </span>
         <span>
           <i>{`${data.name}, ${data.sys.country}`}</i>

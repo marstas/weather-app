@@ -1,3 +1,8 @@
+export enum Units {
+  Metric = "metric",
+  Imperial = "imperial"
+}
+
 export type IpFindData = {
   city: string;
 };
