@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import weatherApi, { Coordinates, CurrentData, ForecastData } from "../api";
-import yellowStar from "../assets/star_yellow.svg";
 import { isCityBookmarked, isValidSearchInput } from "../utils";
 import UnitToggle from "./UnitToggle";
 import SearchBar from "./SearchBar";
 import DailyCard from "./DailyCard";
-import "./App.scss";
 import Current from "./Current";
+import Bookmark from "./Bookmark";
+import "./App.scss";
 
 const api = weatherApi();
 
@@ -64,7 +64,7 @@ export default function App(): JSX.Element {
   };
 
   const handleStarClick = (bookmark: string, remove = false) => {
-    const bookmarkSet = new Set(localStorage.getItem("stars")?.split(";") || [bookmark]);
+    const bookmarkSet = new Set(localStorage.getItem("stars")?.split(";"));
     const bookmarked = isCityBookmarked(bookmarks, city);
 
     // Hold up to 5 city bookmarks in localStorage
@@ -84,31 +84,9 @@ export default function App(): JSX.Element {
   };
 
   const handleBookmarkClick = (bookmark: string) => {
-    const b = bookmark.substring(0, bookmark.indexOf(","));
-    setCity(b);
-    setSearchInput(b);
-  };
-
-  const renderBookmarks = () => {
-    return (
-      bookmarks &&
-      bookmarks?.split(";").map((star, indx) => {
-        return (
-          <div className="bookmark" key={indx}>
-            <button className="bookmark-search" onClick={() => handleBookmarkClick(star)}>
-              {star}
-            </button>
-            <img
-              alt="remove bookmark"
-              className="bookmark-remove"
-              title="Remove from bookmarks"
-              src={yellowStar}
-              onClick={() => handleStarClick(star, true)}
-            />
-          </div>
-        );
-      })
-    );
+    const bookmarkedCity = bookmark.substring(0, bookmark.indexOf(","));
+    setCity(bookmarkedCity);
+    setSearchInput(bookmarkedCity);
   };
 
   return (
@@ -134,9 +112,25 @@ export default function App(): JSX.Element {
         />
       </header>
       <div className={`error-message ${apiError ? "" : "d-none"}`}>{apiError}</div>
-      <div className="bookmarks-wrapper">{renderBookmarks()}</div>
-      <div className="current-wrapper">
-        {current && (
+      {bookmarks && (
+        <div className="bookmarks-wrapper">
+          {bookmarks
+            .split(";")
+            .map(
+              (bookmark) =>
+                bookmark && (
+                  <Bookmark
+                    key={bookmark}
+                    bookmark={bookmark}
+                    onBookmarkClick={handleBookmarkClick}
+                    onStarClick={handleStarClick}
+                  />
+                )
+            )}
+        </div>
+      )}
+      {current && (
+        <div className="current-wrapper">
           <Current
             data={current}
             units={units}
@@ -144,8 +138,8 @@ export default function App(): JSX.Element {
             bookmarks={bookmarks}
             onStarClick={handleStarClick}
           />
-        )}
-      </div>
+        </div>
+      )}
       <div className="forecast-wrapper">
         {forecast?.daily.map((card) => (
           <DailyCard key={card.dt} data={card} />
