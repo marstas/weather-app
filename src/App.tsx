@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Api from "./Api";
 import { Coordinates, CurrentData, ForecastData, Units } from "./models";
-import { isCityBookmarked, isValidSearchInput } from "./utils";
+import { isCityBookmarked, isValidSearchInput, getBookmarks } from "./utils";
 import UnitToggle from "./components/UnitToggle";
 import SearchBar from "./components/SearchBar";
 import DailyCard from "./components/DailyCard";
@@ -17,7 +17,7 @@ export default function App(): JSX.Element {
   const [city, setCity] = useState("");
   const [units, setUnits] = useState(Units.Metric);
   const [searchInput, setSearchInput] = useState("");
-  const [bookmarks, setBookmarks] = useState<string | null>(localStorage.getItem("stars"));
+  const [bookmarks, setBookmarks] = useState<string | null>(getBookmarks());
 
   useEffect(() => {
     Api.getCurrentLocation().then((res) => {
@@ -63,7 +63,7 @@ export default function App(): JSX.Element {
   };
 
   const handleStarClick = (bookmark: string, remove = false) => {
-    const bookmarkSet = new Set(localStorage.getItem("stars")?.split(";"));
+    const bookmarkSet = new Set(getBookmarks()?.split(";"));
     const bookmarked = isCityBookmarked(bookmarks, city);
 
     // Hold up to 5 city bookmarks in localStorage
