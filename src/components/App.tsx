@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import weatherApi, { Coordinates, CurrentData, ForecastData } from "../api";
-import { imgBase } from "../constants";
-import blackStar from "../assets/star_black.svg";
 import yellowStar from "../assets/star_yellow.svg";
-import { isValidSearchInput } from "../utils";
+import { isCityBookmarked, isValidSearchInput } from "../utils";
 import UnitToggle from "./UnitToggle";
 import SearchBar from "./SearchBar";
 import DailyCard from "./DailyCard";
 import "./App.scss";
+import Current from "./Current";
 
 const api = weatherApi();
 
@@ -19,8 +18,7 @@ export default function App(): JSX.Element {
   const [city, setCity] = useState("");
   const [units, setUnits] = useState("metric");
   const [searchInput, setSearchInput] = useState("");
-  const [starred, setStarred] = useState(false);
-  const [stars, setStars] = useState<string | null>(null);
+  const [bookmarks, setBookmarks] = useState<string | null>(localStorage.getItem("stars"));
 
   useEffect(() => {
     api.getCity().then((res) => {
@@ -51,36 +49,6 @@ export default function App(): JSX.Element {
     return () => setCoords(null); // cleanup to avoid double API calls
   }, [coords, units]);
 
-  useEffect(() => {
-    setStars(localStorage.getItem("stars"));
-    if (stars?.match(new RegExp(city, "i"))) setStarred(true);
-    else setStarred(false);
-  }, [city, stars]);
-
-  const handleStarClick = (bookmark: string, remove = false) => {
-    const starsSet = new Set(localStorage.getItem("stars")?.split(";") || [bookmark]);
-    if (starsSet.size === 5 && !starred && !remove) {
-      alert("Up to 5 bookmarks allowed.\nRemove a city first.");
-    } else {
-      if (starred || stars?.match(bookmark)) starsSet.delete(bookmark);
-      else starsSet.add(bookmark);
-
-      const starsArray = Array.from(starsSet).join(";");
-      localStorage.setItem(
-        "stars",
-        starsArray.indexOf(";") === 0 ? starsArray.substring(1) : starsArray
-      );
-      setStars(starsArray);
-      if (bookmark.match(new RegExp(city, "i"))) setStarred(!starred);
-    }
-  };
-
-  const handleBookmarkClick = (bookmark: string) => {
-    const b = bookmark.substring(0, bookmark.indexOf(","));
-    setCity(b);
-    setSearchInput(b);
-  };
-
   const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === "toggle-f") setUnits("imperial");
     else setUnits("metric");
@@ -95,10 +63,36 @@ export default function App(): JSX.Element {
     setSearchInput(event.target.value);
   };
 
-  const renderStars = () => {
+  const handleStarClick = (bookmark: string, remove = false) => {
+    const bookmarkSet = new Set(localStorage.getItem("stars")?.split(";") || [bookmark]);
+    const bookmarked = isCityBookmarked(bookmarks, city);
+
+    // Hold up to 5 city bookmarks in localStorage
+    if (bookmarkSet.size === 5 && !bookmarked && !remove) {
+      alert("Up to 5 bookmarks allowed.\nRemove a city first.");
+    } else {
+      if (bookmarked || bookmarks?.match(bookmark)) bookmarkSet.delete(bookmark);
+      else bookmarkSet.add(bookmark);
+
+      const bookmarkArray = Array.from(bookmarkSet).join(";");
+      localStorage.setItem(
+        "stars",
+        bookmarkArray.indexOf(";") === 0 ? bookmarkArray.substring(1) : bookmarkArray
+      );
+      setBookmarks(bookmarkArray);
+    }
+  };
+
+  const handleBookmarkClick = (bookmark: string) => {
+    const b = bookmark.substring(0, bookmark.indexOf(","));
+    setCity(b);
+    setSearchInput(b);
+  };
+
+  const renderBookmarks = () => {
     return (
-      stars &&
-      stars?.split(";").map((star, indx) => {
+      bookmarks &&
+      bookmarks?.split(";").map((star, indx) => {
         return (
           <div className="bookmark" key={indx}>
             <button className="bookmark-search" onClick={() => handleBookmarkClick(star)}>
@@ -114,34 +108,6 @@ export default function App(): JSX.Element {
           </div>
         );
       })
-    );
-  };
-
-  const renderCurrent = () => {
-    return (
-      current && (
-        <>
-          <img
-            alt={current.weather[0].description}
-            src={`${imgBase}${current.weather[0].icon}@4x.png`}
-          />
-          <div className="current-info">
-            <span className="current-temp">
-              {`${Math.round(current.main.temp)}${units === "metric" ? "° C" : "° F"}`}
-            </span>
-            <span>
-              <i>{`${current.name}, ${current.sys.country}`}</i>
-              <img
-                alt="star"
-                className="star"
-                title={starred ? "Remove from bookmarks" : "Add to bookmarks"}
-                src={starred ? yellowStar : blackStar}
-                onClick={() => handleStarClick(`${current.name}, ${current.sys.country}`)}
-              />
-            </span>
-          </div>
-        </>
-      )
     );
   };
 
@@ -168,8 +134,18 @@ export default function App(): JSX.Element {
         />
       </header>
       <div className={`error-message ${apiError ? "" : "d-none"}`}>{apiError}</div>
-      <div className="bookmarks-wrapper">{renderStars()}</div>
-      <div className="current-wrapper">{renderCurrent()}</div>
+      <div className="bookmarks-wrapper">{renderBookmarks()}</div>
+      <div className="current-wrapper">
+        {current && (
+          <Current
+            data={current}
+            units={units}
+            city={city}
+            bookmarks={bookmarks}
+            onStarClick={handleStarClick}
+          />
+        )}
+      </div>
       <div className="forecast-wrapper">
         {forecast?.daily.map((card) => (
           <DailyCard key={card.dt} data={card} />
