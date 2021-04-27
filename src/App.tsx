@@ -3,11 +3,12 @@ import Api from "./Api";
 import { AxiosError } from "axios";
 import { Coordinates, CurrentData, ForecastData, Units } from "./models";
 import { isCityBookmarked, isValidSearchInput, getBookmarks } from "./utils";
-import UnitToggle from "./components/UnitToggle";
-import SearchBar from "./components/SearchBar";
-import DailyCard from "./components/DailyCard";
+import Header from "./components/header/Header";
+import UnitToggle from "./components/header/UnitToggle";
+import SearchBar from "./components/header/SearchBar";
+import Bookmarks from "./components/bookmarks/Bookmarks";
 import CurrentWeather from "./components/CurrentWeather";
-import Bookmark from "./components/Bookmark";
+import Forecast from "./components/forecast/Forecast";
 import "./App.scss";
 
 export default function App(): JSX.Element {
@@ -91,43 +92,29 @@ export default function App(): JSX.Element {
 
   return (
     <main>
-      <header>
-        <div className="units-radio-wrapper">
-          <UnitToggle
-            system="imperial"
-            isChecked={units === Units.Imperial}
-            onUnitChange={handleUnitChange}
-          />
-          <UnitToggle
-            system="metric"
-            isChecked={units === Units.Metric}
-            onUnitChange={handleUnitChange}
-          />
-        </div>
+      <Header>
+        <UnitToggle
+          system="imperial"
+          isChecked={units === Units.Imperial}
+          onUnitChange={handleUnitChange}
+        />
+        <UnitToggle
+          system="metric"
+          isChecked={units === Units.Metric}
+          onUnitChange={handleUnitChange}
+        />
         <SearchBar
           input={searchInput}
           isDisabled={!isValidSearchInput(searchInput)}
           onSearchChange={handleSearchChange}
           onSearchSubmit={handleSearchSubmit}
         />
-      </header>
+      </Header>
       {apiError && <code className="error-message">{apiError}</code>}
       {bookmarks && (
-        <div className="bookmarks-wrapper">
-          {bookmarks
-            .split(";")
-            .map(
-              (bookmark) =>
-                bookmark && (
-                  <Bookmark
-                    key={bookmark}
-                    bookmark={bookmark}
-                    onBookmarkClick={handleBookmarkClick}
-                    onStarClick={handleStarClick}
-                  />
-                )
-            )}
-        </div>
+        <Bookmarks handleBookmarkClick={handleBookmarkClick} handleStarClick={handleStarClick}>
+          {bookmarks}
+        </Bookmarks>
       )}
       {currentWeather && (
         <div className="current-wrapper">
@@ -140,11 +127,7 @@ export default function App(): JSX.Element {
           />
         </div>
       )}
-      <div className="forecast-wrapper">
-        {forecast?.daily.map((card) => (
-          <DailyCard key={card.dt} data={card} />
-        ))}
-      </div>
+      {forecast && <Forecast>{forecast}</Forecast>}
     </main>
   );
 }
