@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Api from "./Api";
+import { AxiosError } from "axios";
 import { Coordinates, CurrentData, ForecastData, Units } from "./models";
 import { isCityBookmarked, isValidSearchInput, getBookmarks } from "./utils";
 import UnitToggle from "./components/UnitToggle";
@@ -13,34 +14,34 @@ export default function App(): JSX.Element {
   const [currentWeather, setCurrentWeather] = useState<CurrentData | null>(null);
   const [forecast, setForecast] = useState<ForecastData | null>(null);
   const [coords, setCoords] = useState<Coordinates | null>(null);
-  const [apiError, setApiError] = useState("");
+  const [apiError, setApiError] = useState<string | null>(null);
   const [city, setCity] = useState("");
   const [units, setUnits] = useState(Units.Metric);
   const [searchInput, setSearchInput] = useState("");
   const [bookmarks, setBookmarks] = useState<string | null>(getBookmarks());
 
   useEffect(() => {
-    Api.getCurrentLocation().then((res) => {
-      if (res.city) {
+    Api.getCurrentLocation()
+      .then((res) => {
         setCity(res.city);
         setSearchInput(res.city);
-      }
-    });
+      })
+      .catch((error: AxiosError) => setApiError(`IPfind API error: ${error.response?.data.error}`));
   }, []); // get location/weather info on first load
 
   useEffect(() => {
     if (city)
-      Api.getCurrentWeather(city, units).then((res) => {
-        if (res.name !== "Error") {
+      Api.getCurrentWeather(city, units)
+        .then((res) => {
           setCurrentWeather(res);
           setCoords({ lat: res.coord.lat, lon: res.coord.lon });
-          setApiError("");
-        } else {
+          setApiError(null);
+        })
+        .catch((error: AxiosError) => {
           setCurrentWeather(null);
           setForecast(null);
-          setApiError(`City "${city}" was not found`);
-        }
-      });
+          setApiError(`Open Weather Map API error: ${error.response?.data.message}`);
+        });
   }, [city, units]);
 
   useEffect(() => {
@@ -110,7 +111,7 @@ export default function App(): JSX.Element {
           onSearchSubmit={handleSearchSubmit}
         />
       </header>
-      <div className={`error-message ${apiError ? "" : "d-none"}`}>{apiError}</div>
+      {apiError && <code className="error-message">{apiError}</code>}
       {bookmarks && (
         <div className="bookmarks-wrapper">
           {bookmarks
