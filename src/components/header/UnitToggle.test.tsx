@@ -5,15 +5,19 @@ import UnitToggle from "./UnitToggle";
 const onUnitChangeMock = jest.fn();
 
 test.each([
-  ["imperial", "toggle-f", " ° F"],
-  ["metric", "toggle-c", " ° C"]
-])("renders %s system elements", (unitSystem, toggleId, labelText) => {
-  render(<UnitToggle system={unitSystem} isChecked={false} onUnitChange={onUnitChangeMock} />);
+  ["imperial", true, "toggle-f", " ° F"],
+  ["metric", false, "toggle-c", " ° C"]
+])(
+  'Renders %s system elements with "checked" set to %s',
+  (system, isChecked, toggleId, labelText) => {
+    render(<UnitToggle system={system} isChecked={isChecked} onUnitChange={onUnitChangeMock} />);
 
-  const radio = screen.getByTestId("unit-radio") as HTMLInputElement;
-  const label = screen.getByTestId("unit-label") as HTMLLabelElement;
-  expect(radio.id).toBe(toggleId);
-  expect(radio.name).toBe(toggleId);
-  expect(label.htmlFor).toBe(toggleId);
-  expect(label.innerHTML).toBe(labelText);
-});
+    const radio = screen.getByTestId("unit-radio") as HTMLInputElement;
+    const label = screen.getByTestId("unit-label") as HTMLLabelElement;
+    expect(radio.id).toBe(toggleId);
+    expect(radio.name).toBe(toggleId);
+    expect(radio.checked).toBe(isChecked);
+    expect(label.htmlFor).toBe(toggleId);
+    expect(label.innerHTML).toBe(labelText);
+  }
+);
