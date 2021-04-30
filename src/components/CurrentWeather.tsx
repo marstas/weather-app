@@ -9,7 +9,7 @@ type CurrentWeatherProps = {
   data: CurrentData;
   units: Units;
   city: string;
-  bookmarks: string | null;
+  bookmarks: string[];
   onStarClick: (bookmark: string, remove?: boolean) => void;
 };
 

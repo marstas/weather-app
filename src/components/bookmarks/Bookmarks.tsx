@@ -2,7 +2,7 @@ import React from "react";
 import Bookmark from "./Bookmark";
 
 type BookmarksProps = {
-  children: string;
+  children: string[];
   handleBookmarkClick: (bookmark: string) => void;
   handleStarClick: (bookmark: string, remove?: boolean) => void;
 };
@@ -14,19 +14,14 @@ export default function Bookmarks({
 }: BookmarksProps): JSX.Element {
   return (
     <div className="bookmarks-wrapper">
-      {children
-        .split(";")
-        .map(
-          (bookmark) =>
-            bookmark && (
-              <Bookmark
-                key={bookmark}
-                bookmark={bookmark}
-                onBookmarkClick={handleBookmarkClick}
-                onStarClick={handleStarClick}
-              />
-            )
-        )}
+      {children.map((bookmark) => (
+        <Bookmark
+          key={bookmark}
+          bookmark={bookmark}
+          onBookmarkClick={handleBookmarkClick}
+          onStarClick={handleStarClick}
+        />
+      ))}
     </div>
   );
 }

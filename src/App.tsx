@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import Api from "./Api";
 import { AxiosError } from "axios";
 import { Coordinates, CurrentData, ForecastData, Units } from "./models";
-import { isCityBookmarked, isValidSearchInput, getBookmarks } from "./utils";
+import {
+  isCityBookmarked,
+  isValidSearchInput,
+  getLocalBookmarks,
+  setLocalBookmarks
+} from "./utils";
 import Header from "./components/header/Header";
 import UnitToggle from "./components/header/UnitToggle";
 import SearchBar from "./components/header/SearchBar";
@@ -19,7 +24,7 @@ export default function App(): JSX.Element {
   const [city, setCity] = useState("");
   const [units, setUnits] = useState(Units.Metric);
   const [searchInput, setSearchInput] = useState("");
-  const [bookmarks, setBookmarks] = useState<string | null>(getBookmarks());
+  const [bookmarks, setBookmarks] = useState<string[]>(getLocalBookmarks());
 
   useEffect(() => {
     Api.getCurrentLocation()
@@ -65,29 +70,27 @@ export default function App(): JSX.Element {
   };
 
   const handleStarClick = (bookmark: string, remove = false) => {
-    const bookmarkSet = new Set(getBookmarks()?.split(";"));
-    const bookmarked = isCityBookmarked(bookmarks, city);
+    const isBookmarked = isCityBookmarked(bookmarks, city);
 
     // Hold up to 5 city bookmarks in localStorage
-    if (bookmarkSet.size === 5 && !bookmarked && !remove) {
+    if (bookmarks.length === 5 && !isBookmarked && !remove) {
       alert("Up to 5 bookmarks allowed.\nRemove a city first.");
     } else {
-      if (bookmarked || bookmarks?.match(bookmark)) bookmarkSet.delete(bookmark);
-      else bookmarkSet.add(bookmark);
+      if (isBookmarked || bookmarks.includes(bookmark))
+        bookmarks.splice(bookmarks.indexOf(bookmark), 1);
+      else bookmarks.push(bookmark);
 
-      const bookmarkString = Array.from(bookmarkSet).join(";");
-      localStorage.setItem(
-        "stars",
-        bookmarkString.indexOf(";") === 0 ? bookmarkString.substring(1) : bookmarkString
-      );
-      setBookmarks(bookmarkString);
+      setBookmarks([...bookmarks]);
+      setLocalBookmarks(bookmarks);
     }
   };
 
   const handleBookmarkClick = (bookmark: string) => {
-    const bookmarkedCity = bookmark.substring(0, bookmark.indexOf(","));
-    setCity(bookmarkedCity);
-    setSearchInput(bookmarkedCity);
+    const bookmarkedCity = bookmarks.find((b) => b === bookmark);
+    if (bookmarkedCity) {
+      setCity(bookmarkedCity);
+      setSearchInput(bookmarkedCity);
+    }
   };
 
   return (
@@ -111,7 +114,7 @@ export default function App(): JSX.Element {
         />
       </Header>
       {apiError && <code className="error-message">{apiError}</code>}
-      {bookmarks && (
+      {bookmarks.length > 0 && (
         <Bookmarks handleBookmarkClick={handleBookmarkClick} handleStarClick={handleStarClick}>
           {bookmarks}
         </Bookmarks>
