@@ -16,6 +16,7 @@ export default function SearchBar({
   return (
     <form onSubmit={onSearchSubmit}>
       <input
+        data-testid="search-input"
         className="search-input"
         type="search"
         placeholder="Enter city name..."
@@ -24,6 +25,7 @@ export default function SearchBar({
         onChange={(event) => onSearchChange(event)}
       />
       <input
+        data-testid="search-submit"
         className="search-submit"
         type="submit"
         value="Search"
