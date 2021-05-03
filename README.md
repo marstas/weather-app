@@ -12,6 +12,12 @@ Install the dependencies:
 yarn
 ```
 
+Run unit tests:
+
+```
+yarn test
+```
+
 Launch the app in dev mode:
 
 ```
