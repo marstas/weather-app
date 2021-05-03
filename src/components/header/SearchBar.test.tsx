@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 
 test.each([
   ["foo", false, "Search"],
-  ["bar", true, "Numbers and special characters are not allowed"]
+  ["bar", true, "Forbidden characters detected"]
 ])("Renders with correct attribute values", (input, isDisabled, title) => {
   render(
     <SearchBar

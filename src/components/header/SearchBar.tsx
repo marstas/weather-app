@@ -30,7 +30,7 @@ export default function SearchBar({
         type="submit"
         value="Search"
         disabled={isDisabled}
-        title={isDisabled ? "Numbers and special characters are not allowed" : "Search"}
+        title={isDisabled ? "Forbidden characters detected" : "Search"}
       />
     </form>
   );
