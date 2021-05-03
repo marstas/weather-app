@@ -18,14 +18,14 @@ export default function UnitToggle({
   return (
     <>
       <input
-        data-testid="unit-radio"
+        data-testid={`unit-radio-${system}`}
         type="radio"
         id={inputName}
         name={inputName}
         onChange={(event) => onUnitChange(event)}
         checked={isChecked}
       />
-      <label data-testid="unit-label" htmlFor={inputName}>
+      <label data-testid={`unit-label-${system}`} htmlFor={inputName}>
         {labelText}
       </label>
     </>
