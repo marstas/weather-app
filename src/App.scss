@@ -3,10 +3,6 @@ $color-light: #e0e0e0;
 $color-gray: #8a8989;
 
 body {
-  .d-none {
-    display: none !important;
-  }
-
   main {
     margin-top: 3rem;
 
@@ -90,9 +86,11 @@ body {
       display: flex;
       justify-content: center;
       margin: 0.75rem auto;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: chocolate;
+      word-break: break-word;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 2px 6px 1px $color-light;
+      padding: 1.2rem;
     }
 
     .current-wrapper {

@@ -14,7 +14,6 @@
     }
   },
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
     "react/jsx-filename-extension": [
       "warn",
@@ -22,10 +21,10 @@
         "extensions": [".jsx", ".tsx"]
       }
     ],
-    "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-shadow": ["error", { "builtinGlobals": false, "hoist": "functions", "allow": [] }]
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
   },
   "settings": {
     "react": {

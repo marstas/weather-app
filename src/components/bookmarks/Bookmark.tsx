@@ -1,5 +1,5 @@
 import React from "react";
-import yellowStar from "../assets/star_yellow.svg";
+import yellowStar from "../../assets/star_yellow.svg";
 
 type BookmarkProps = {
   bookmark: string;

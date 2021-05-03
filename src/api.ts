@@ -1,78 +1,41 @@
-import axios from "axios";
-import { current, onecall, ipFind } from "./constants";
+import axios, { AxiosError } from "axios";
+import { Coordinates, CurrentData, ForecastData, IpFindData, Units } from "./models";
 
-type WeatherApi = {
-  getCurrent: (city: string, units: string) => Promise<CurrentData>;
-  getForecast: (coords: Coordinates, units: string) => Promise<ForecastData>;
-  getCity: () => Promise<IpFindData>;
-};
+const weatherMapApiKey = "86e9a453e4af0c55cc11e8bf54c567d0";
+const ipFindApiKey = "54151f53-0664-4a57-992c-ecb0f474aaf5";
+const currentWeather = `https://api.openweathermap.org/data/2.5/weather?appid=${weatherMapApiKey}`;
+const forecast = `https://api.openweathermap.org/data/2.5/onecall?appid=${weatherMapApiKey}&exclude=current,minutely,hourly,alerts`;
+const currentLocation = `https://ipfind.co/me?auth=${ipFindApiKey}`;
 
-type IpFindData = {
-  city: string;
-};
+export const imgBase = "https://openweathermap.org/img/wn/";
 
-export type Coordinates = {
-  lat: number;
-  lon: number;
-};
+export default class Api {
+  static async getCurrentWeather(city: string, units: Units): Promise<CurrentData> {
+    return await axios
+      .get(currentWeather, { params: { q: city, units } })
+      .then((res) => res.data)
+      .catch((error: AxiosError) => {
+        throw error;
+      });
+  }
 
-export type CurrentData = {
-  name: string;
-  coord: Coordinates;
-  main: {
-    temp: number;
-  };
-  sys: {
-    country: string;
-  };
-  weather: WeatherData[];
-};
+  static async getForecast(coords: Coordinates, units: Units): Promise<ForecastData> {
+    return await axios
+      .get(forecast, {
+        params: { lat: coords.lat, lon: coords.lon, units }
+      })
+      .then((res) => res.data)
+      .catch((error: AxiosError) => {
+        throw error;
+      });
+  }
 
-export type ForecastData = {
-  daily: DailyData[];
-};
-
-export type DailyData = {
-  dt: number;
-  temp: {
-    min: number;
-    max: number;
-  };
-  weather: WeatherData[];
-};
-
-export type WeatherData = {
-  description: string;
-  icon: string;
-};
-
-export default function weatherApi(): WeatherApi {
-  return {
-    getCurrent: async (city: string, units: string) => {
-      try {
-        const res = await axios.get(`${current}&q=${city}&units=${units}`);
-        return res.data;
-      } catch (error) {
-        return error.toJSON();
-      }
-    },
-    getForecast: async (coords: Coordinates, units: string) => {
-      try {
-        const res = await axios.get(
-          `${onecall}&lat=${coords.lat}&lon=${coords.lon}&units=${units}`
-        );
-        return res.data;
-      } catch (error) {
-        return error.toJSON();
-      }
-    },
-    getCity: async () => {
-      try {
-        const res = await axios.get(ipFind);
-        return res.data;
-      } catch (error) {
-        return error.toJSON();
-      }
-    }
-  };
+  static async getCurrentLocation(): Promise<IpFindData> {
+    return await axios
+      .get(currentLocation)
+      .then((res) => res.data)
+      .catch((error: AxiosError) => {
+        throw error;
+      });
+  }
 }

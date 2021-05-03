@@ -1,42 +1,44 @@
 import React from "react";
 import { isCityBookmarked } from "../utils";
-import { CurrentData } from "../api";
-import { imgBase } from "../constants";
+import { CurrentData, Units } from "../models";
+import { imgBase } from "../Api";
 import blackStar from "../assets/star_black.svg";
 import yellowStar from "../assets/star_yellow.svg";
 
-type CurrentProps = {
+type CurrentWeatherProps = {
   data: CurrentData;
-  units: string;
+  units: Units;
   city: string;
-  bookmarks: string | null;
+  bookmarks: string[];
   onStarClick: (bookmark: string, remove?: boolean) => void;
 };
 
-export default function Current({
+export default function CurrentWeather({
   data,
   units,
   city,
   bookmarks,
   onStarClick
-}: CurrentProps): JSX.Element {
+}: CurrentWeatherProps): JSX.Element {
   const bookmarked = isCityBookmarked(bookmarks, city);
+  const imageSource = `${imgBase}${data.weather[0].icon}@4x.png`;
+  const weatherDescription = data.weather[0].description;
+  const currentTemp = `${Math.round(data.main.temp)}${units === Units.Metric ? "° C" : "° F"}`;
+  const location = `${data.name}, ${data.sys.country}`;
 
   return (
     <>
-      <img alt={data.weather[0].description} src={`${imgBase}${data.weather[0].icon}@4x.png`} />
+      <img alt={weatherDescription} src={imageSource} />
       <div className="current-info">
-        <span className="current-temp">
-          {`${Math.round(data.main.temp)}${units === "metric" ? "° C" : "° F"}`}
-        </span>
+        <span className="current-temp">{currentTemp}</span>
         <span>
-          <i>{`${data.name}, ${data.sys.country}`}</i>
+          <i>{location}</i>
           <img
             alt="star"
             className="star"
             title={bookmarked ? "Remove from bookmarks" : "Add to bookmarks"}
             src={bookmarked ? yellowStar : blackStar}
-            onClick={() => onStarClick(`${data.name}, ${data.sys.country}`)}
+            onClick={() => onStarClick(location)}
           />
         </span>
       </div>
