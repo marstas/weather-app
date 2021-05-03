@@ -1,6 +1,6 @@
 # Weather App
 
-A simple Web app that displays the weather info using [Open Weather Map API](https://openweathermap.org/api).
+Web app for checking weather information by city, using [Open Weather Map API](https://openweathermap.org/api).
 
 Built using React with TypeScript.
 
@@ -18,4 +18,4 @@ Launch the app in dev mode:
 yarn start
 ```
 
-In your browser, open [http://localhost:8080](http://localhost:8080)
+Open [http://localhost:8080](http://localhost:8080)
