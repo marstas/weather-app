@@ -2,15 +2,8 @@ import React, { useEffect, useState } from "react";
 import Api from "./Api";
 import { AxiosError } from "axios";
 import { Coordinates, CurrentData, ForecastData, Units } from "./models";
-import {
-  isCityBookmarked,
-  isValidSearchInput,
-  getLocalBookmarks,
-  setLocalBookmarks
-} from "./utils";
+import { isCityBookmarked, getLocalBookmarks, setLocalBookmarks } from "./utils";
 import Header from "./components/header/Header";
-import UnitToggle from "./components/header/UnitToggle";
-import SearchBar from "./components/header/SearchBar";
 import Bookmarks from "./components/bookmarks/Bookmarks";
 import CurrentWeather from "./components/CurrentWeather";
 import Forecast from "./components/forecast/Forecast";
@@ -95,24 +88,13 @@ export default function App(): JSX.Element {
 
   return (
     <main>
-      <Header>
-        <UnitToggle
-          system="imperial"
-          isChecked={units === Units.Imperial}
-          onUnitChange={handleUnitChange}
-        />
-        <UnitToggle
-          system="metric"
-          isChecked={units === Units.Metric}
-          onUnitChange={handleUnitChange}
-        />
-        <SearchBar
-          input={searchInput}
-          isDisabled={!isValidSearchInput(searchInput)}
-          onSearchChange={handleSearchChange}
-          onSearchSubmit={handleSearchSubmit}
-        />
-      </Header>
+      <Header
+        units={units}
+        searchInput={searchInput}
+        handleUnitChange={handleUnitChange}
+        handleSearchChange={handleSearchChange}
+        handleSearchSubmit={handleSearchSubmit}
+      />
       {apiError && <code className="error-message">{apiError}</code>}
       {bookmarks.length > 0 && (
         <Bookmarks handleBookmarkClick={handleBookmarkClick} handleStarClick={handleStarClick}>
